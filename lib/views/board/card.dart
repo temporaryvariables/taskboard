@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/item.dart';
 import 'package:taskboard/routes.dart';
+import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/preview.dart';
 
 class BoardCard extends StatelessWidget {
@@ -20,8 +22,10 @@ class BoardCard extends StatelessWidget {
     return SizedBox(
       width: cardWidth,
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(context, openNewBoard(item));
+        onTap: () async {
+          var nav = Navigator.of(context);
+          await Provider.of<AppState>(context, listen: false).setBoard(item);
+          nav.push(openNewBoard(item));
         },
         child: Card(
           elevation: 0,

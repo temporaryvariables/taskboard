@@ -68,10 +68,13 @@ class BoardBottomBar extends StatelessWidget {
                         Item? itemToDelete =
                             await currentState.getItemFromId(itemId);
                         if (itemToDelete != null) {
+                          currentState.setBoard(itemToDelete);
                           nav.push(openNewBoard(itemToDelete));
                         }
                       }
                     } else if (text.startsWith("\\b")) {
+                      currentState
+                          .setBoard(currentState.parentItem.parentItem.value!);
                       Navigator.pop(context);
                     }
                     value.cliController.clear();

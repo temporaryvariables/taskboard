@@ -5,43 +5,87 @@ import 'package:taskboard/models/isar_models/item.dart';
 
 class AppState with ChangeNotifier {
   late Isar isarInstance;
-  Item parentItem = Item("Default", '', -1);
   TextEditingController cliController = TextEditingController();
 
-  AppState(Isar i) {
-    isarInstance = i;
+  late Item parentItem;
+  late List<Item> childItems;
+
+  static final Item badItem = Item("Item not found :(", "", 0);
+
+  AppState(Isar isarInsatnce, Item? mainItem) {
+    isarInstance = isarInsatnce;
+    parentItem = mainItem ?? badItem;
+    childItems = parentItem.boardItems.toList();
 
     cliController.addListener(() {
       notifyListeners();
     });
+
+    reWatch();
   }
 
-  // this function is always run once on load
-  Future<bool> setInitialItem(Item? i) async {
-    if (i != null) {
-      parentItem = (await isarInstance.items
-          .where()
-          .filter()
-          .idEqualTo(i.id)
-          .findFirst())!;
-    } else {
-      var count = await isarInstance.getSize();
-      if (count == 0) {
-        // -1 order signifies main item
-        var i = Item("Main", "Backlog", -1);
-        i.boardName = "Main";
-        await isarInstance.writeTxn(() async {
-          await isarInstance.items.put(i);
-        });
-      }
-      parentItem = (await isarInstance.items
-          .where()
-          .filter()
-          .orderEqualTo(-1)
-          .findFirst())!;
+  void reWatch() {
+    watchParent();
+    watchChildren();
+  }
+
+  void watchParent() {
+    isarInstance.items.watchObject(parentItem.id, fireImmediately: true).listen(
+      (event) async {
+        parentItem = (await isarInstance.items
+                .where()
+                .filter()
+                .idEqualTo(parentItem.id)
+                .findFirst()) ??
+            badItem;
+        childItems = parentItem.boardItems.toList();
+        notifyListeners();
+      },
+    );
+  }
+
+  void watchItem(int id) {
+    isarInstance.items.watchObject(id, fireImmediately: true).listen(
+      (event) async {
+        parentItem = (await isarInstance.items
+                .where()
+                .filter()
+                .idEqualTo(parentItem.id)
+                .findFirst()) ??
+            badItem;
+        childItems = parentItem.boardItems.toList();
+        notifyListeners();
+      },
+    );
+  }
+
+  void watchChildren() {
+    for (var children in parentItem.boardItems) {
+      watchItem(children.id);
     }
+  }
+
+  Future<void> setBoard(Item item) async {
+    parentItem = (await isarInstance.items
+            .where()
+            .filter()
+            .idEqualTo(item.id)
+            .findFirst()) ??
+        badItem;
+    childItems = parentItem.boardItems.toList();
+
+    reWatch();
     notifyListeners();
-    return true;
+  }
+
+  String getFullPath() {
+    Item? pointer = parentItem;
+    String path = "";
+    while (pointer != null) {
+      path = "${pointer.boardName!}\\$path";
+      pointer = pointer.parentItem.value;
+    }
+    return path;
   }
 
   Future<int> addItemWithText(String text) async {
@@ -60,6 +104,7 @@ class AppState with ChangeNotifier {
       await parentItem.boardItems.save();
       await i.parentItem.save();
     });
+    watchItem(id);
     notifyListeners();
     return id;
   }
@@ -70,6 +115,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.items.put(i);
     });
+    watchItem(id);
     notifyListeners();
     return id;
   }
@@ -100,6 +146,7 @@ class AppState with ChangeNotifier {
         await isarInstance.items.put(element);
       }
     });
+    watchItem(id);
     notifyListeners();
     return id;
   }

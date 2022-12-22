@@ -25,6 +25,7 @@ class Item {
     var now = DateTime.now();
     createdDate = now;
     lastUpdated = now;
+    boardName = text;
 
     var backlog = IsarColumn();
     backlog.name = "Backlog";

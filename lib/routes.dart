@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/models/isar_models/item.dart';
-import 'package:taskboard/views/board/board.dart';
 import 'package:taskboard/views/board/edit_card.dart';
 import 'package:taskboard/views/board/edit_column.dart';
+import 'package:taskboard/views/board_container.dart';
 
 Route<Widget> openNewBoard(Item i) {
   return PageRouteBuilder<Widget>(
@@ -10,9 +10,7 @@ Route<Widget> openNewBoard(Item i) {
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        BoardPage(
-      item: i,
-    ),
+        const BoardContainer(),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       const Offset begin = Offset(0.0, 1.0);

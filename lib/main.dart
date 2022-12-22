@@ -3,15 +3,29 @@ import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/models/isar_models/item.dart';
 import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/board/board.dart';
+import 'package:taskboard/views/board_container.dart';
 
 Future<void> main() async {
   Isar isarInstance = await Isar.open([ItemSchema]);
+  var count = await isarInstance.getSize();
+
+  // if "main" board doesnt exist, create it
+  if (count == 0) {
+    // -1 order signifies main item
+    var i = Item("Main", "", -1);
+    i.boardName = "Main";
+    await isarInstance.writeTxn(() async {
+      await isarInstance.items.put(i);
+    });
+  }
+
+  var mainItem = await isarInstance.items.filter().orderEqualTo(-1).findFirst();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppState(isarInstance))
+        ChangeNotifierProvider(
+            create: (context) => AppState(isarInstance, mainItem))
       ],
       child: const MainApp(),
     ),
@@ -23,8 +37,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const BoardPage(),
+    return const MaterialApp(
+      home: BoardContainer(),
     );
   }
 }
