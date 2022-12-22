@@ -15,7 +15,6 @@ class BoardContainer extends StatefulWidget {
 }
 
 class _BoardContainerState extends State<BoardContainer> {
-  final TextEditingController _contextController = TextEditingController();
   final FocusNode _contextFocus = FocusNode();
   Future<void>? initilized;
 
@@ -57,7 +56,6 @@ class _BoardContainerState extends State<BoardContainer> {
             children: [
               const BoardColumns(),
               BoardBottomBar(
-                contextController: _contextController,
                 contextFocus: _contextFocus,
               ),
             ],

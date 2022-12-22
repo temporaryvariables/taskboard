@@ -121,7 +121,7 @@ class _EditCardState extends State<EditCard> {
                 child: const Text("Delete"),
                 onPressed: () {
                   Provider.of<AppState>(context, listen: false)
-                      .deleteItem(widget.item);
+                      .deleteItemRecursivily(widget.item);
                   Navigator.pop(context);
                 },
               ),

@@ -47,7 +47,7 @@ class BoardCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            item.text,
+                            "${item.id}. ${item.text}",
                             style: const TextStyle(fontSize: 16),
                           ),
                           IconButton(

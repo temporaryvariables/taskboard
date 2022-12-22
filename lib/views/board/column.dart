@@ -35,7 +35,7 @@ class BoardColumn extends StatelessWidget {
           onAccept: (data) async {
             // what happens when dragged onto new column
             await Provider.of<AppState>(context, listen: false)
-                .moveItemToColumn(data, data.column, column.name);
+                .moveItemToColumn(data, column.name);
           },
           builder: (context, candidateData, rejectedData) {
             return Column(

@@ -23,6 +23,13 @@ class BoardColumns extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var column = appState.parentItem.boardColumns[index];
                     var itemsInColumn = appState.parentItem.boardItems.toList();
+                    if (appState.cliController.text.isNotEmpty &&
+                        !appState.cliController.text.startsWith("\\")) {
+                      itemsInColumn = itemsInColumn
+                          .where((element) => element.text
+                              .contains(appState.cliController.text))
+                          .toList();
+                    }
                     itemsInColumn = itemsInColumn
                         .where((element) => element.column == column.name)
                         .toList();

@@ -6,9 +6,14 @@ import 'package:taskboard/models/isar_models/item.dart';
 class AppState with ChangeNotifier {
   late Isar isarInstance;
   Item parentItem = Item("Default", '', -1);
+  TextEditingController cliController = TextEditingController();
 
   AppState(Isar i) {
     isarInstance = i;
+
+    cliController.addListener(() {
+      notifyListeners();
+    });
   }
 
   // this function is always run once on load
@@ -69,6 +74,19 @@ class AppState with ChangeNotifier {
     return id;
   }
 
+  Future<int> editItemText(int itemId, String text) async {
+    var item = await getItemFromId(itemId);
+    var id = -1;
+    if (item != null) {
+      item.text = text;
+      await isarInstance.writeTxn(() async {
+        id = await isarInstance.items.put(item);
+      });
+    }
+    notifyListeners();
+    return id;
+  }
+
   Future<int> addItemWithColumns(
       Item item, String oldValue, String newValue) async {
     var i = item;
@@ -86,14 +104,18 @@ class AppState with ChangeNotifier {
     return id;
   }
 
-  Future<void> deleteItem(Item item) async {
+  Future<Item?> getItemFromId(int id) async {
+    return await isarInstance.items.where().idEqualTo(id).findFirst();
+  }
+
+  Future<void> deleteItemRecursivily(Item item) async {
     if (item.boardItems.isEmpty) {
       await isarInstance.writeTxn(() async {
         await isarInstance.items.delete(item.id);
       });
     } else {
       for (var i in item.boardItems) {
-        deleteItem(i);
+        deleteItemRecursivily(i);
       }
       await isarInstance.writeTxn(() async {
         await isarInstance.items.delete(item.id);
@@ -133,9 +155,16 @@ class AppState with ChangeNotifier {
     return id;
   }
 
-  Future<void> moveItemToColumn(
-      Item i, String fromColumn, String toColumn) async {
+  Future<void> moveItemToColumnFromId(int id, String toColumn) async {
+    var item = await getItemFromId(id);
+    if (item != null) {
+      await moveItemToColumn(item, toColumn);
+    }
+  }
+
+  Future<void> moveItemToColumn(Item i, String toColumn) async {
     // set new order
+    var fromColumn = i.column;
     i.order = parentItem.boardItems
         .toList()
         .where((element) => element.column == toColumn)
@@ -144,12 +173,13 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       // * does this automatically change link value as well? Yes it does!
       await isarInstance.items.put(i);
+      // await i.parentItem.value!.boardItems.save();
     });
 
     // reset order of old tasks
     var updatingItems = parentItem.boardItems
         .toList()
-        .where((element) => element.column == fromColumn)
+        .where((element) => element.column == fromColumn && element.id != i.id)
         .toList();
 
     for (int i = 0; i < updatingItems.length; i++) {

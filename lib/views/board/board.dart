@@ -16,7 +16,6 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
-  final TextEditingController _contextController = TextEditingController();
   final FocusNode _contextFocus = FocusNode();
   Future<void>? initilized;
 
@@ -41,7 +40,6 @@ class _BoardPageState extends State<BoardPage> {
   @override
   void dispose() {
     super.dispose();
-    _contextController.dispose();
     _contextFocus.dispose();
   }
 
@@ -65,7 +63,6 @@ class _BoardPageState extends State<BoardPage> {
             children: [
               const BoardColumns(),
               BoardBottomBar(
-                contextController: _contextController,
                 contextFocus: _contextFocus,
               ),
             ],
