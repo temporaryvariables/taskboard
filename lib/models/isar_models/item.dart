@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:taskboard/models/isar_models/isar_column.dart';
-import 'package:taskboard/models/isar_models/content.dart';
 
 part 'item.g.dart';
 
@@ -12,7 +11,9 @@ class Item {
   Id id = Isar.autoIncrement;
   late DateTime createdDate;
   late DateTime lastUpdated;
-  Content content;
+  String text;
+  DateTime? dueDate;
+  double priority = 2.5;
   String column;
   int order;
   String? boardName;
@@ -20,7 +21,7 @@ class Item {
   IsarLink<Item> parentItem = IsarLink<Item>();
   IsarLinks<Item> boardItems = IsarLinks<Item>();
 
-  Item(this.content, this.column, this.order) {
+  Item(this.text, this.column, this.order) {
     var now = DateTime.now();
     createdDate = now;
     lastUpdated = now;
@@ -43,4 +44,10 @@ class Item {
   List<String> get boardColumnsAsStrings {
     return boardColumns.map((e) => e.name).toList();
   }
+
+  @override
+  bool operator ==(dynamic other) => other != null && other.id == id;
+
+  @override
+  int get hashCode => super.hashCode;
 }

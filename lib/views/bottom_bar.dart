@@ -25,7 +25,8 @@ class BoardBottomBar extends StatelessWidget {
               controller: _contextController,
               focusNode: _contextFocus,
               onSubmitted: (String text) {
-                Provider.of<AppState>(context, listen: false).addItem(text);
+                Provider.of<AppState>(context, listen: false)
+                    .addItemWithText(text);
                 _contextController.clear();
                 _contextFocus.requestFocus();
               },
@@ -62,7 +63,7 @@ class BoardBottomBar extends StatelessWidget {
             splashRadius: 20,
             onPressed: () {
               Provider.of<AppState>(context, listen: false)
-                  .addItem(_contextController.text);
+                  .addItemWithText(_contextController.text);
               _contextController.clear();
               _contextFocus.requestFocus();
             },

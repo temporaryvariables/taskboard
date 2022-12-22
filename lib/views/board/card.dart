@@ -43,9 +43,26 @@ class BoardCard extends StatelessWidget {
                       const SizedBox(
                         height: 2,
                       ),
-                      Text(
-                        item.content.text ?? "",
-                        style: const TextStyle(fontSize: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item.text,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          IconButton(
+                            splashRadius: 15,
+                            padding: const EdgeInsets.all(0),
+                            onPressed: () {
+                              Navigator.push(
+                                  context, openEditCard(item, color));
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              size: 16,
+                            ),
+                          )
+                        ],
                       ),
                       const Divider(),
                       Row(
@@ -56,7 +73,7 @@ class BoardCard extends StatelessWidget {
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            formatDate(item.content.dueDate ?? DateTime.now()),
+                            formatDate(item.dueDate ?? DateTime.now()),
                             style: const TextStyle(fontSize: 14),
                           ),
                         ],
@@ -69,7 +86,7 @@ class BoardCard extends StatelessWidget {
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            item.content.priority.toString(),
+                            item.priority.toString(),
                             style: const TextStyle(fontSize: 14),
                           ),
                         ],

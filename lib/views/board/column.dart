@@ -60,7 +60,8 @@ class BoardColumn extends StatelessWidget {
                         await state.removeColumn(index);
                         break;
                       case Menu.edit:
-                        Navigator.push(context, openEditColumn(index));
+                        Navigator.push(
+                            context, openEditColumn(index, state.parentItem));
                         break;
                       default:
                     }

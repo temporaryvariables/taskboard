@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
-import 'package:taskboard/models/isar_models/content.dart';
 import 'package:taskboard/models/isar_models/isar_column.dart';
 import 'package:taskboard/models/isar_models/item.dart';
-import 'package:taskboard/views/board/column.dart';
 
 class AppState with ChangeNotifier {
   late Isar isarInstance;
-  Item parentItem = Item(Content(), '', -1);
+  Item parentItem = Item("Default", '', -1);
 
   AppState(Isar i) {
     isarInstance = i;
@@ -25,9 +23,7 @@ class AppState with ChangeNotifier {
       var count = await isarInstance.getSize();
       if (count == 0) {
         // -1 order signifies main item
-        Content content = Content();
-        content.text = "Main";
-        var i = Item(content, "Backlog", -1);
+        var i = Item("Main", "Backlog", -1);
         i.boardName = "Main";
         await isarInstance.writeTxn(() async {
           await isarInstance.items.put(i);
@@ -43,15 +39,13 @@ class AppState with ChangeNotifier {
     return true;
   }
 
-  Future<int> addItem(String text) async {
+  Future<int> addItemWithText(String text) async {
     var column = parentItem.boardColumns.first.name;
     var order = parentItem.boardItems
         .toList()
         .where((element) => element.column == column)
         .length;
-    var content = Content();
-    content.text = text;
-    var i = Item(content, column, order);
+    var i = Item(text, column, order);
     i.parentItem.value = parentItem;
     i.boardName = text;
     var id = -1;
@@ -63,6 +57,49 @@ class AppState with ChangeNotifier {
     });
     notifyListeners();
     return id;
+  }
+
+  Future<int> addItem(Item item) async {
+    var i = item;
+    var id = -1;
+    await isarInstance.writeTxn(() async {
+      id = await isarInstance.items.put(i);
+    });
+    notifyListeners();
+    return id;
+  }
+
+  Future<int> addItemWithColumns(
+      Item item, String oldValue, String newValue) async {
+    var i = item;
+    var id = -1;
+    await isarInstance.writeTxn(() async {
+      id = await isarInstance.items.put(i);
+      for (var element in item.boardItems) {
+        if (element.column == oldValue) {
+          element.column = newValue;
+        }
+        await isarInstance.items.put(element);
+      }
+    });
+    notifyListeners();
+    return id;
+  }
+
+  Future<void> deleteItem(Item item) async {
+    if (item.boardItems.isEmpty) {
+      await isarInstance.writeTxn(() async {
+        await isarInstance.items.delete(item.id);
+      });
+    } else {
+      for (var i in item.boardItems) {
+        deleteItem(i);
+      }
+      await isarInstance.writeTxn(() async {
+        await isarInstance.items.delete(item.id);
+      });
+    }
+    notifyListeners();
   }
 
   Future<int> addColumn(int index, IsarColumn column) async {

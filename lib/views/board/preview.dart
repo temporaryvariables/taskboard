@@ -42,7 +42,7 @@ class _BoardPreviewState extends State<BoardPreview> {
           var columnItems = item.boardItems.toList();
           columnItems = columnItems
               .where(
-                (element) => element.column == item.boardColumns[index],
+                (element) => element.column == item.boardColumns[index].name,
               )
               .toList();
           return SizedBox(
@@ -72,7 +72,7 @@ class _BoardPreviewState extends State<BoardPreview> {
                     );
                   }
                   return Tooltip(
-                    message: columnItems[index2].content.text,
+                    message: columnItems[index2].text,
                     verticalOffset: -13,
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
