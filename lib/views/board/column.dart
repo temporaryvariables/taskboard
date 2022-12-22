@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
+import 'package:taskboard/models/isar_models/isar_column.dart';
 import 'package:taskboard/models/isar_models/item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
@@ -15,7 +16,7 @@ class BoardColumn extends StatelessWidget {
     required this.itemsInColumn,
   }) : super(key: key);
 
-  final String column;
+  final IsarColumn column;
   final List<Item> itemsInColumn;
 
   @override
@@ -34,7 +35,7 @@ class BoardColumn extends StatelessWidget {
           onAccept: (data) async {
             // what happens when dragged onto new column
             await Provider.of<AppState>(context, listen: false)
-                .moveItemToColumn(data, data.column, column);
+                .moveItemToColumn(data, data.column, column.name);
           },
           builder: (context, candidateData, rejectedData) {
             return Column(
@@ -42,13 +43,18 @@ class BoardColumn extends StatelessWidget {
                 PopupMenuButton(
                   onSelected: (Menu item) async {
                     var state = Provider.of<AppState>(context, listen: false);
-                    var index = state.parentItem.boardColumns.indexOf(column);
+                    var index = state.parentItem.boardColumnsAsStrings
+                        .indexOf(column.name);
                     switch (item) {
                       case Menu.addLeft:
-                        await state.addColumn(index, "Backlog $index");
+                        var isarColumn = IsarColumn();
+                        isarColumn.name = "Backlog $index";
+                        await state.addColumn(index, isarColumn);
                         break;
                       case Menu.addRight:
-                        await state.addColumn(index + 1, "Backlog $index");
+                        var isarColumn = IsarColumn();
+                        isarColumn.name = "Backlog $index";
+                        await state.addColumn(index + 1, isarColumn);
                         break;
                       case Menu.remove:
                         await state.removeColumn(index);
@@ -81,7 +87,7 @@ class BoardColumn extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: Text(
-                    column,
+                    column.name,
                     style: const TextStyle(fontSize: 18),
                   ),
                 ),
@@ -96,12 +102,16 @@ class BoardColumn extends StatelessWidget {
                       var item = itemsInColumn[index];
                       return Draggable<Item>(
                         data: item,
-                        feedback: BoardCard(item: item),
+                        feedback: BoardCard(
+                            color: Color(int.parse(column.color)), item: item),
                         childWhenDragging: Opacity(
                           opacity: 0.5,
-                          child: BoardCard(item: item),
+                          child: BoardCard(
+                              color: Color(int.parse(column.color)),
+                              item: item),
                         ),
-                        child: BoardCard(item: item),
+                        child: BoardCard(
+                            color: Color(int.parse(column.color)), item: item),
                       );
                     },
                   ),

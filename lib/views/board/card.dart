@@ -5,12 +5,11 @@ import 'package:taskboard/routes.dart';
 import 'package:taskboard/views/board/preview.dart';
 
 class BoardCard extends StatelessWidget {
-  const BoardCard({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
+  const BoardCard({Key? key, required this.item, required this.color})
+      : super(key: key);
 
   final Item item;
+  final Color color;
 
   String formatDate(DateTime date) {
     return "${date.month}/${date.day}/${date.year}";
@@ -26,61 +25,74 @@ class BoardCard extends StatelessWidget {
         },
         child: Card(
           elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(
-                height: 2,
-              ),
-              Text(
-                item.content!,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Created",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    formatDate(item.createdDate),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Updated",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    formatDate(item.lastUpdated),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              if (item.boardItems.isNotEmpty)
-                Align(
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: BoardPreview(
-                      item: item,
-                    ),
-                  ),
+          child: ClipPath(
+            clipper: ShapeBorderClipper(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3))),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: color, width: 5),
                 ),
-              const SizedBox(
-                height: 12,
               ),
-            ]),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        item.content.text ?? "",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Due Date",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            formatDate(item.content.dueDate ?? DateTime.now()),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Priority",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            item.content.priority.toString(),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      if (item.boardItems.isNotEmpty)
+                        Align(
+                          alignment: Alignment.center,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: BoardPreview(
+                              item: item,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ]),
+              ),
+            ),
           ),
         ),
       ),

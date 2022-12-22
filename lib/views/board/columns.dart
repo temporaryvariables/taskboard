@@ -24,7 +24,7 @@ class BoardColumns extends StatelessWidget {
                     var column = appState.parentItem.boardColumns[index];
                     var itemsInColumn = appState.parentItem.boardItems.toList();
                     itemsInColumn = itemsInColumn
-                        .where((element) => element.column == column)
+                        .where((element) => element.column == column.name)
                         .toList();
                     itemsInColumn.sort(
                       (a, b) => a.order.compareTo(b.order),

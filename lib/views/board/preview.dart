@@ -13,7 +13,13 @@ class BoardPreview extends StatefulWidget {
 
 class _BoardPreviewState extends State<BoardPreview> {
   late Item item;
-  List<Color> colors = [Colors.grey, Colors.blue, Colors.green];
+  List<Color> colors = [
+    Colors.grey,
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.purple
+  ];
 
   @override
   void initState() {
@@ -66,7 +72,7 @@ class _BoardPreviewState extends State<BoardPreview> {
                     );
                   }
                   return Tooltip(
-                    message: columnItems[index2].content,
+                    message: columnItems[index2].content.text,
                     verticalOffset: -13,
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),

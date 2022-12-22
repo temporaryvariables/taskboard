@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
+import 'package:taskboard/models/isar_models/content.dart';
+import 'package:taskboard/models/isar_models/isar_column.dart';
 import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/views/board/column.dart';
 
 class AppState with ChangeNotifier {
   late Isar isarInstance;
-  Item parentItem = Item('', '', -1);
+  Item parentItem = Item(Content(), '', -1);
 
   AppState(Isar i) {
     isarInstance = i;
@@ -22,7 +25,9 @@ class AppState with ChangeNotifier {
       var count = await isarInstance.getSize();
       if (count == 0) {
         // -1 order signifies main item
-        var i = Item('Main', defaultColumns[0], -1);
+        Content content = Content();
+        content.text = "Main";
+        var i = Item(content, "Backlog", -1);
         i.boardName = "Main";
         await isarInstance.writeTxn(() async {
           await isarInstance.items.put(i);
@@ -38,15 +43,17 @@ class AppState with ChangeNotifier {
     return true;
   }
 
-  Future<int> addItem(String context) async {
-    var column = parentItem.boardColumns.first;
+  Future<int> addItem(String text) async {
+    var column = parentItem.boardColumns.first.name;
     var order = parentItem.boardItems
         .toList()
         .where((element) => element.column == column)
         .length;
-    var i = Item(context, column, order);
+    var content = Content();
+    content.text = text;
+    var i = Item(content, column, order);
     i.parentItem.value = parentItem;
-    i.boardName = context;
+    i.boardName = text;
     var id = -1;
     await isarInstance.writeTxn(() async {
       id = await isarInstance.items.put(i);
@@ -58,10 +65,10 @@ class AppState with ChangeNotifier {
     return id;
   }
 
-  Future<int> addColumn(int index, String column) async {
+  Future<int> addColumn(int index, IsarColumn column) async {
     var parentColumns = parentItem.boardColumns;
     var length = parentColumns.length;
-    var columns = [
+    List<IsarColumn> columns = [
       ...parentColumns.getRange(0, index),
       column,
       ...parentColumns.getRange(index, length)
