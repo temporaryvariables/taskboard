@@ -15,9 +15,8 @@ class _TaskboardState extends State<Taskboard> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building Taskboard");
     return Scaffold(
-      backgroundColor: const Color.fromARGB(254, 249, 247, 247),
+      backgroundColor: Colors.white,
       appBar: const TaskboardTopBar(),
       body: Column(
         children: [

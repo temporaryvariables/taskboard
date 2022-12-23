@@ -15,7 +15,6 @@ class TaskboardBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Building TaskboardBottomBar");
     return Container(
       color: Colors.white,
       child: Padding(

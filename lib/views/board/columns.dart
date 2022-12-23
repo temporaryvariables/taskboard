@@ -10,7 +10,6 @@ class TaskboardColumns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Building columns");
     return Expanded(
       child: Consumer<AppState>(
         builder: (_, appState, __) {

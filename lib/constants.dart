@@ -4,6 +4,8 @@ const List<String> defaultColumns = ["Backlog", "In Progress", "Done"];
 
 const double cardWidth = 250;
 
+enum Menu { addLeft, addRight, remove, edit }
+
 const List<Color> colors = [
   Color(0xFFF44336), // red
   Color(0xFFE91E63), // pink

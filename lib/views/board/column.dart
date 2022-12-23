@@ -3,11 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/card.dart';
-
-enum Menu { addLeft, addRight, remove, edit }
+import 'package:taskboard/views/helper_widgets/column_menu.dart';
 
 class TaskboardColumn extends StatelessWidget {
   const TaskboardColumn({
@@ -19,11 +17,8 @@ class TaskboardColumn extends StatelessWidget {
   final TBColumn column;
   final List<TBItem> itemsInColumn;
 
-  String get columnName => column.name;
-
   @override
   Widget build(BuildContext context) {
-    print("Building column ${column.name}");
     return Container(
       width: cardWidth * 1.05,
       decoration: BoxDecoration(border: Border.all(color: Colors.black12)),
@@ -32,78 +27,18 @@ class TaskboardColumn extends StatelessWidget {
         child: DragTarget<TBItem>(
           onWillAccept: (data) {
             if (data == null) return false;
-            return data.column != columnName;
+            return data.column != column.name;
           },
           onAccept: (data) async {
             await Provider.of<AppState>(context, listen: false)
-                .moveItemToColumn(data, columnName);
+                .moveItemToColumn(data, column.name);
           },
           builder: (context, candidateData, rejectedData) {
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        columnName,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      PopupMenuButton(
-                        iconSize: 20,
-                        splashRadius: 16,
-                        padding: const EdgeInsets.all(0),
-                        onSelected: (Menu item) async {
-                          var state =
-                              Provider.of<AppState>(context, listen: false);
-                          var index = state.parentItem.boardColumnsAsStrings
-                              .indexOf(columnName);
-                          switch (item) {
-                            case Menu.addLeft:
-                              var isarColumn = TBColumn();
-                              await state.addColumn(index, isarColumn);
-                              break;
-                            case Menu.addRight:
-                              var isarColumn = TBColumn();
-                              await state.addColumn(index + 1, isarColumn);
-                              break;
-                            case Menu.edit:
-                              Navigator.push(context,
-                                  openEditColumn(index, state.parentItem));
-                              break;
-                            case Menu.remove:
-                              await state.removeColumn(index);
-                              break;
-                            default:
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem<Menu>(
-                            height: 25,
-                            value: Menu.addLeft,
-                            child: Text('Add Left'),
-                          ),
-                          const PopupMenuItem<Menu>(
-                            height: 25,
-                            value: Menu.addRight,
-                            child: Text('Add Right'),
-                          ),
-                          const PopupMenuItem<Menu>(
-                            height: 25,
-                            value: Menu.edit,
-                            child: Text('Edit'),
-                          ),
-                          PopupMenuItem<Menu>(
-                            height: 25,
-                            enabled: itemsInColumn.isEmpty,
-                            value: Menu.remove,
-                            child: const Text('Remove'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                TaskBoardColumnHeader(
+                  columnName: column.name,
+                  isRemoveEnabled: itemsInColumn.isEmpty,
                 ),
                 const Divider(
                   height: 0,
@@ -113,15 +48,17 @@ class TaskboardColumn extends StatelessWidget {
                     itemCount: itemsInColumn.length,
                     itemBuilder: (context, index) {
                       var item = itemsInColumn[index];
-                      var card = TaskboardCard(column: column, item: item);
+                      var columnColor = Color(int.parse(column.color));
+                      var itemCard =
+                          TaskboardCard(columnColor: columnColor, item: item);
                       return Draggable<TBItem>(
                         data: item,
-                        feedback: card,
+                        feedback: itemCard,
                         childWhenDragging: Opacity(
                           opacity: 0.5,
-                          child: card,
+                          child: itemCard,
                         ),
-                        child: card,
+                        child: itemCard,
                       );
                     },
                   ),

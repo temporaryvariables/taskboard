@@ -10,7 +10,6 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Building TaskboardTopBar");
     return Consumer<AppState>(
       builder: (context, appState, child) {
         return AppBar(
@@ -22,9 +21,8 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
           ),
           leading: GestureDetector(
             onTap: () async {
-              var navigator = Navigator.of(context);
+              Navigator.pop(context);
               await appState.setBoard(appState.parentItem.parentItem.value!);
-              navigator.pop();
             },
             child: const Icon(
               Icons.arrow_back_ios,

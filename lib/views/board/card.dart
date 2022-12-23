@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
-import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/preview.dart';
 
 class TaskboardCard extends StatelessWidget {
-  const TaskboardCard({Key? key, required this.column, required this.item})
+  const TaskboardCard({Key? key, required this.columnColor, required this.item})
       : super(key: key);
 
-  final TBColumn column;
+  final Color columnColor;
   final TBItem item;
-
-  Color get columnColor => column.colorAsColor;
 
   @override
   Widget build(BuildContext context) {
-    print("Building card ${item.text}");
     return SizedBox(
       width: cardWidth,
       child: GestureDetector(
