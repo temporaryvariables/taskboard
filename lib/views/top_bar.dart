@@ -26,7 +26,7 @@ class BoardTopBar extends StatelessWidget with PreferredSizeWidget {
               navigator.pop();
             },
             child: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
               color: Colors.black,
             ),
           ),

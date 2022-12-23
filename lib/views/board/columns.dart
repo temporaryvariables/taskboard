@@ -16,7 +16,7 @@ class BoardColumns extends StatelessWidget {
           return Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: appState.parentItem.boardColumns.length,
