@@ -7,111 +7,116 @@ import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/preview.dart';
 
 class BoardCard extends StatelessWidget {
-  const BoardCard({Key? key, required this.item, required this.color})
-      : super(key: key);
+  const BoardCard({Key? key, required this.item}) : super(key: key);
 
   final Item item;
-  final Color color;
 
-  String formatDate(DateTime date) {
+  String getFormatedDate(DateTime date) {
     return "${date.month}/${date.day}/${date.year}";
+  }
+
+  Color getColumnColor() {
+    var parentItemColumn = item.parentItem.value!.boardColumns;
+    var isarColumn =
+        parentItemColumn.where((column) => column.name == item.column).first;
+    return isarColumn.colorAsColor;
   }
 
   @override
   Widget build(BuildContext context) {
+    var color = getColumnColor();
     return SizedBox(
       width: cardWidth,
-      child: GestureDetector(
-        onTap: () async {
-          var nav = Navigator.of(context);
-          await Provider.of<AppState>(context, listen: false).setBoard(item);
-          nav.push(openNewBoard(item));
-        },
-        child: Card(
-          elevation: 0,
-          child: ClipPath(
-            clipper: ShapeBorderClipper(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3))),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: color, width: 5),
-                ),
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        child: ClipPath(
+          clipper: ShapeBorderClipper(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: color, width: 6),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 2,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, openEditCard(item, color));
+                      },
+                      child: Text(
+                        "[${item.id}] ${item.text}",
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(fontSize: 20),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${item.id}. ${item.text}",
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          IconButton(
-                            splashRadius: 15,
-                            padding: const EdgeInsets.all(0),
-                            onPressed: () {
-                              Navigator.push(
-                                  context, openEditCard(item, color));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              size: 16,
-                            ),
-                          )
-                        ],
-                      ),
-                      const Divider(),
-                      Row(
+                    ),
+                  ),
+                  if (item.dueDate != null || item.priority != null)
+                    const Divider(
+                      height: 0,
+                    ),
+                  if (item.dueDate != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             "Due Date",
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            formatDate(item.dueDate ?? DateTime.now()),
-                            style: const TextStyle(fontSize: 14),
+                            getFormatedDate(item.dueDate!),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
-                      Row(
+                    ),
+                  if (item.priority != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             "Priority",
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 16),
                           ),
                           Text(
                             item.priority.toString(),
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      if (item.boardItems.isNotEmpty)
-                        Align(
+                    ),
+                  if (item.boardItems.isNotEmpty)
+                    GestureDetector(
+                      onTap: () async {
+                        var nav = Navigator.of(context);
+                        await Provider.of<AppState>(context, listen: false)
+                            .setBoard(item);
+                        nav.push(openNewBoard(item));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Align(
                           alignment: Alignment.center,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: BoardPreview(
-                              item: item,
-                            ),
+                          child: BoardPreview(
+                            item: item,
                           ),
                         ),
-                      const SizedBox(
-                        height: 12,
                       ),
-                    ]),
+                    ),
+                ],
               ),
             ),
           ),

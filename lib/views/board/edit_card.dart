@@ -24,7 +24,7 @@ class _EditCardState extends State<EditCard> {
     super.initState();
     textController.text = widget.item.text;
     boardName.text = widget.item.boardName ?? "";
-    priority = widget.item.priority;
+    priority = widget.item.priority ?? 2.5;
   }
 
   Future<void> _selectDate(BuildContext context) async {

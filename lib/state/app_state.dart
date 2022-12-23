@@ -82,7 +82,7 @@ class AppState with ChangeNotifier {
     Item? pointer = parentItem;
     String path = "";
     while (pointer != null) {
-      path = "${pointer.boardName!}\\$path";
+      path = "\\${pointer.boardName}$path";
       pointer = pointer.parentItem.value;
     }
     return path;

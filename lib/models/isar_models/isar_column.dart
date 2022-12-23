@@ -7,4 +7,6 @@ part "isar_column.g.dart";
 class IsarColumn {
   String name = "default";
   String color = Colors.blue.toString();
+
+  Color get colorAsColor => Color(int.parse(color));
 }

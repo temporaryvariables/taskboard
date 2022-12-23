@@ -180,7 +180,7 @@ Item _itemDeserialize(
   object.dueDate = reader.readDateTimeOrNull(offsets[5]);
   object.id = id;
   object.lastUpdated = reader.readDateTime(offsets[7]);
-  object.priority = reader.readDouble(offsets[9]);
+  object.priority = reader.readDoubleOrNull(offsets[9]);
   return object;
 }
 
@@ -216,7 +216,7 @@ P _itemDeserializeProp<P>(
     case 8:
       return (reader.readLong(offset)) as P;
     case 9:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     default:
@@ -1230,8 +1230,24 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterFilterCondition> priorityIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'priority',
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> priorityIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'priority',
+      ));
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterFilterCondition> priorityEqualTo(
-    double value, {
+    double? value, {
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1244,7 +1260,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> priorityGreaterThan(
-    double value, {
+    double? value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
@@ -1259,7 +1275,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> priorityLessThan(
-    double value, {
+    double? value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
@@ -1274,8 +1290,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 
   QueryBuilder<Item, Item, QAfterFilterCondition> priorityBetween(
-    double lower,
-    double upper, {
+    double? lower,
+    double? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     double epsilon = Query.epsilon,
@@ -1861,7 +1877,7 @@ extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Item, double, QQueryOperations> priorityProperty() {
+  QueryBuilder<Item, double?, QQueryOperations> priorityProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'priority');
     });

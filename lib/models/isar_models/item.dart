@@ -13,7 +13,7 @@ class Item {
   late DateTime lastUpdated;
   String text;
   DateTime? dueDate;
-  double priority = 2.5;
+  double? priority;
   String column;
   int order;
   String? boardName;
