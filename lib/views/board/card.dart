@@ -18,8 +18,12 @@ class BoardCard extends StatelessWidget {
   Color getColumnColor() {
     var parentItemColumn = item.parentItem.value!.boardColumns;
     var isarColumn =
-        parentItemColumn.where((column) => column.name == item.column).first;
-    return isarColumn.colorAsColor;
+        parentItemColumn.where((column) => column.name == item.column);
+    if (isarColumn.isEmpty) {
+      return Colors.blue;
+    } else {
+      return isarColumn.first.colorAsColor;
+    }
   }
 
   @override

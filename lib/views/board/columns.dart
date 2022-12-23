@@ -36,7 +36,8 @@ class BoardColumns extends StatelessWidget {
                     itemsInColumn.sort(
                       (a, b) => a.order.compareTo(b.order),
                     );
-                    return BoardColumn(itemsInColumn: itemsInColumn);
+                    return BoardColumn(
+                        column: column, itemsInColumn: itemsInColumn);
                   },
                 ),
               ),

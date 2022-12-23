@@ -12,13 +12,14 @@ enum Menu { addLeft, addRight, remove, edit }
 class BoardColumn extends StatelessWidget {
   const BoardColumn({
     Key? key,
+    required this.column,
     required this.itemsInColumn,
   }) : super(key: key);
 
+  final IsarColumn column;
   final List<Item> itemsInColumn;
 
-  String get column =>
-      (itemsInColumn.isNotEmpty) ? itemsInColumn.first.column : "default";
+  String get columnName => column.name;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,11 @@ class BoardColumn extends StatelessWidget {
         child: DragTarget<Item>(
           onWillAccept: (data) {
             if (data == null) return false;
-            return data.column != column;
+            return data.column != columnName;
           },
           onAccept: (data) async {
             await Provider.of<AppState>(context, listen: false)
-                .moveItemToColumn(data, column);
+                .moveItemToColumn(data, columnName);
           },
           builder: (context, candidateData, rejectedData) {
             return Column(
@@ -45,7 +46,7 @@ class BoardColumn extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        column,
+                        columnName,
                         style: const TextStyle(fontSize: 18),
                       ),
                       PopupMenuButton(
@@ -56,7 +57,7 @@ class BoardColumn extends StatelessWidget {
                           var state =
                               Provider.of<AppState>(context, listen: false);
                           var index = state.parentItem.boardColumnsAsStrings
-                              .indexOf(column);
+                              .indexOf(columnName);
                           switch (item) {
                             case Menu.addLeft:
                               var isarColumn = IsarColumn();

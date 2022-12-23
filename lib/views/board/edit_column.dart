@@ -27,7 +27,6 @@ class _EditColumnState extends State<EditColumn> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     columnName.text = widget.item.boardColumns[widget.index].name;
     selectedColor = widget.item.boardColumns[widget.index].color;
