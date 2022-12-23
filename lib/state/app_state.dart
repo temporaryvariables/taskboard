@@ -18,7 +18,10 @@ class AppState with ChangeNotifier {
     childItems = parentItem.boardItems.toList();
 
     cliController.addListener(() {
-      notifyListeners();
+      if (cliController.text.length > 2 &&
+          !cliController.text.startsWith('\\')) {
+        notifyListeners();
+      }
     });
 
     reWatch();
@@ -46,7 +49,7 @@ class AppState with ChangeNotifier {
     );
   }
 
-  void watchItem(int id) {
+  void watchChild(int id) {
     isarInstance.tBItems.watchObject(id, fireImmediately: true).listen(
       (event) async {
         parentItem = (await isarInstance.tBItems
@@ -63,7 +66,7 @@ class AppState with ChangeNotifier {
 
   void watchChildren() {
     for (var children in parentItem.boardItems) {
-      watchItem(children.id);
+      watchChild(children.id);
     }
   }
 
@@ -106,8 +109,8 @@ class AppState with ChangeNotifier {
       await parentItem.boardItems.save();
       await i.parentItem.save();
     });
-    watchItem(id);
-    notifyListeners();
+    watchChild(id);
+    // notifyListeners();
     return id;
   }
 
@@ -117,8 +120,8 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(i);
     });
-    watchItem(id);
-    notifyListeners();
+    watchChild(id);
+    // notifyListeners();
     return id;
   }
 
@@ -131,7 +134,7 @@ class AppState with ChangeNotifier {
         id = await isarInstance.tBItems.put(item);
       });
     }
-    notifyListeners();
+    // notifyListeners();
     return id;
   }
 
@@ -148,8 +151,8 @@ class AppState with ChangeNotifier {
         await isarInstance.tBItems.put(element);
       }
     });
-    watchItem(id);
-    notifyListeners();
+    watchChild(id);
+    // notifyListeners();
     return id;
   }
 
@@ -170,7 +173,7 @@ class AppState with ChangeNotifier {
         await isarInstance.tBItems.delete(item.id);
       });
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<int> addColumn(int index, TBColumn column) async {
@@ -186,7 +189,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(parentItem);
     });
-    notifyListeners();
+    // notifyListeners();
     return id;
   }
 
@@ -200,7 +203,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(parentItem);
     });
-    notifyListeners();
+    // notifyListeners();
     return id;
   }
 
@@ -235,6 +238,6 @@ class AppState with ChangeNotifier {
       await isarInstance.tBItems.putAll(updatingItems);
     });
 
-    notifyListeners();
+    // notifyListeners();
   }
 }

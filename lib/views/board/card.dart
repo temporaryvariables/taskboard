@@ -19,6 +19,7 @@ class TaskboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Building card ${item.text}");
     return SizedBox(
       width: cardWidth,
       child: GestureDetector(

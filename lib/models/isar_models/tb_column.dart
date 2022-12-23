@@ -6,7 +6,7 @@ part "tb_column.g.dart";
 @embedded
 class TBColumn {
   String name = "default";
-  String color = Colors.blue.value.toString();
+  String color = Colors.black.value.toString();
 
   @ignore
   Color get colorAsColor => Color(int.parse(color));

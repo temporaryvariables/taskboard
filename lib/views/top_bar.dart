@@ -10,6 +10,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Building TaskboardTopBar");
     return Consumer<AppState>(
       builder: (context, appState, child) {
         return AppBar(

@@ -3,7 +3,7 @@ import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/board_container.dart';
+import 'package:taskboard/views/board/board.dart';
 
 Future<void> main() async {
   Isar isarInstance = await Isar.open([TBItemSchema]);

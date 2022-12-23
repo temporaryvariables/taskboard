@@ -23,6 +23,7 @@ class TaskboardColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Building column ${column.name}");
     return Container(
       width: cardWidth * 1.05,
       decoration: BoxDecoration(border: Border.all(color: Colors.black12)),

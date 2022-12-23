@@ -13,13 +13,6 @@ class TaskboardCardPreview extends StatefulWidget {
 
 class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
   late TBItem item;
-  List<Color> colors = [
-    Colors.grey,
-    Colors.blue,
-    Colors.green,
-    Colors.orange,
-    Colors.purple
-  ];
 
   @override
   void initState() {

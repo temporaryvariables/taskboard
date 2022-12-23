@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/views/board/edit_card.dart';
 import 'package:taskboard/views/board/edit_column.dart';
-import 'package:taskboard/views/board_container.dart';
+import 'package:taskboard/views/board/board.dart';
 
 Route<Widget> openNewBoard(TBItem i) {
   return PageRouteBuilder<Widget>(
