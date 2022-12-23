@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
-import 'package:taskboard/models/isar_models/isar_column.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_column.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 
 class AppState with ChangeNotifier {
   late Isar isarInstance;
   TextEditingController cliController = TextEditingController();
 
-  late Item parentItem;
-  late List<Item> childItems;
+  late TBItem parentItem;
+  late List<TBItem> childItems;
 
-  static final Item badItem = Item("Item not found :(", "", 0);
+  static final TBItem badItem = TBItem("Item not found :(", "", 0);
 
-  AppState(Isar isarInsatnce, Item? mainItem) {
+  AppState(Isar isarInsatnce, TBItem? mainItem) {
     isarInstance = isarInsatnce;
     parentItem = mainItem ?? badItem;
     childItems = parentItem.boardItems.toList();
@@ -30,9 +30,11 @@ class AppState with ChangeNotifier {
   }
 
   void watchParent() {
-    isarInstance.items.watchObject(parentItem.id, fireImmediately: true).listen(
+    isarInstance.tBItems
+        .watchObject(parentItem.id, fireImmediately: true)
+        .listen(
       (event) async {
-        parentItem = (await isarInstance.items
+        parentItem = (await isarInstance.tBItems
                 .where()
                 .filter()
                 .idEqualTo(parentItem.id)
@@ -45,9 +47,9 @@ class AppState with ChangeNotifier {
   }
 
   void watchItem(int id) {
-    isarInstance.items.watchObject(id, fireImmediately: true).listen(
+    isarInstance.tBItems.watchObject(id, fireImmediately: true).listen(
       (event) async {
-        parentItem = (await isarInstance.items
+        parentItem = (await isarInstance.tBItems
                 .where()
                 .filter()
                 .idEqualTo(parentItem.id)
@@ -65,8 +67,8 @@ class AppState with ChangeNotifier {
     }
   }
 
-  Future<void> setBoard(Item item) async {
-    parentItem = (await isarInstance.items
+  Future<void> setBoard(TBItem item) async {
+    parentItem = (await isarInstance.tBItems
             .where()
             .filter()
             .idEqualTo(item.id)
@@ -79,7 +81,7 @@ class AppState with ChangeNotifier {
   }
 
   String getFullPath() {
-    Item? pointer = parentItem;
+    TBItem? pointer = parentItem;
     String path = "";
     while (pointer != null) {
       path = "\\${pointer.boardName}$path";
@@ -94,12 +96,12 @@ class AppState with ChangeNotifier {
         .toList()
         .where((element) => element.column == column)
         .length;
-    var i = Item(text, column, order);
+    var i = TBItem(text, column, order);
     i.parentItem.value = parentItem;
     i.boardName = text;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.items.put(i);
+      id = await isarInstance.tBItems.put(i);
       parentItem.boardItems.add(i);
       await parentItem.boardItems.save();
       await i.parentItem.save();
@@ -109,11 +111,11 @@ class AppState with ChangeNotifier {
     return id;
   }
 
-  Future<int> addItem(Item item) async {
+  Future<int> addItem(TBItem item) async {
     var i = item;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.items.put(i);
+      id = await isarInstance.tBItems.put(i);
     });
     watchItem(id);
     notifyListeners();
@@ -126,7 +128,7 @@ class AppState with ChangeNotifier {
     if (item != null) {
       item.text = text;
       await isarInstance.writeTxn(() async {
-        id = await isarInstance.items.put(item);
+        id = await isarInstance.tBItems.put(item);
       });
     }
     notifyListeners();
@@ -134,16 +136,16 @@ class AppState with ChangeNotifier {
   }
 
   Future<int> addItemWithColumns(
-      Item item, String oldValue, String newValue) async {
+      TBItem item, String oldValue, String newValue) async {
     var i = item;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.items.put(i);
+      id = await isarInstance.tBItems.put(i);
       for (var element in item.boardItems) {
         if (element.column == oldValue) {
           element.column = newValue;
         }
-        await isarInstance.items.put(element);
+        await isarInstance.tBItems.put(element);
       }
     });
     watchItem(id);
@@ -151,30 +153,30 @@ class AppState with ChangeNotifier {
     return id;
   }
 
-  Future<Item?> getItemFromId(int id) async {
-    return await isarInstance.items.where().idEqualTo(id).findFirst();
+  Future<TBItem?> getItemFromId(int id) async {
+    return await isarInstance.tBItems.where().idEqualTo(id).findFirst();
   }
 
-  Future<void> deleteItemRecursivily(Item item) async {
+  Future<void> deleteItemRecursivily(TBItem item) async {
     if (item.boardItems.isEmpty) {
       await isarInstance.writeTxn(() async {
-        await isarInstance.items.delete(item.id);
+        await isarInstance.tBItems.delete(item.id);
       });
     } else {
       for (var i in item.boardItems) {
         deleteItemRecursivily(i);
       }
       await isarInstance.writeTxn(() async {
-        await isarInstance.items.delete(item.id);
+        await isarInstance.tBItems.delete(item.id);
       });
     }
     notifyListeners();
   }
 
-  Future<int> addColumn(int index, IsarColumn column) async {
+  Future<int> addColumn(int index, TBColumn column) async {
     var parentColumns = parentItem.boardColumns;
     var length = parentColumns.length;
-    List<IsarColumn> columns = [
+    List<TBColumn> columns = [
       ...parentColumns.getRange(0, index),
       column,
       ...parentColumns.getRange(index, length)
@@ -182,7 +184,7 @@ class AppState with ChangeNotifier {
     parentItem.boardColumns = columns;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.items.put(parentItem);
+      id = await isarInstance.tBItems.put(parentItem);
     });
     notifyListeners();
     return id;
@@ -196,7 +198,7 @@ class AppState with ChangeNotifier {
     parentItem.boardColumns = columns;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.items.put(parentItem);
+      id = await isarInstance.tBItems.put(parentItem);
     });
     notifyListeners();
     return id;
@@ -209,8 +211,7 @@ class AppState with ChangeNotifier {
     }
   }
 
-  Future<void> moveItemToColumn(Item i, String toColumn) async {
-    // set new order
+  Future<void> moveItemToColumn(TBItem i, String toColumn) async {
     var fromColumn = i.column;
     i.order = parentItem.boardItems
         .toList()
@@ -218,12 +219,9 @@ class AppState with ChangeNotifier {
         .length;
     i.column = toColumn;
     await isarInstance.writeTxn(() async {
-      // * does this automatically change link value as well? Yes it does!
-      await isarInstance.items.put(i);
-      // await i.parentItem.value!.boardItems.save();
+      await isarInstance.tBItems.put(i);
     });
 
-    // reset order of old tasks
     var updatingItems = parentItem.boardItems
         .toList()
         .where((element) => element.column == fromColumn && element.id != i.id)
@@ -234,7 +232,7 @@ class AppState with ChangeNotifier {
     }
 
     await isarInstance.writeTxn(() async {
-      await isarInstance.items.putAll(updatingItems);
+      await isarInstance.tBItems.putAll(updatingItems);
     });
 
     notifyListeners();

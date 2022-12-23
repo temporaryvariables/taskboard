@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
-import 'package:taskboard/models/isar_models/isar_column.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_column.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/preview.dart';
 
-class BoardCard extends StatelessWidget {
-  const BoardCard({Key? key, required this.column, required this.item})
+class TaskboardCard extends StatelessWidget {
+  const TaskboardCard({Key? key, required this.column, required this.item})
       : super(key: key);
 
-  final IsarColumn column;
-  final Item item;
+  final TBColumn column;
+  final TBItem item;
 
   Color get columnColor => column.colorAsColor;
 
@@ -101,7 +101,7 @@ class BoardCard extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 5),
                         child: Align(
                           alignment: Alignment.center,
-                          child: BoardPreview(
+                          child: TaskboardCardPreview(
                             item: item,
                           ),
                         ),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 
-class BoardPreview extends StatefulWidget {
-  const BoardPreview({super.key, required this.item});
+class TaskboardCardPreview extends StatefulWidget {
+  const TaskboardCardPreview({super.key, required this.item});
 
-  final Item item;
+  final TBItem item;
 
   @override
-  State<BoardPreview> createState() => _BoardPreviewState();
+  State<TaskboardCardPreview> createState() => _TaskboardCardPreviewState();
 }
 
-class _BoardPreviewState extends State<BoardPreview> {
-  late Item item;
+class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
+  late TBItem item;
   List<Color> colors = [
     Colors.grey,
     Colors.blue,

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 
-part "isar_column.g.dart";
+part "tb_column.g.dart";
 
 @embedded
-class IsarColumn {
+class TBColumn {
   String name = "default";
   String color = Colors.blue.value.toString();
 
+  @ignore
   Color get colorAsColor => Color(int.parse(color));
 }

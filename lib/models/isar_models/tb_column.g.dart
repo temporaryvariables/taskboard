@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'isar_column.dart';
+part of 'tb_column.dart';
 
 // **************************************************************************
 // IsarEmbeddedGenerator
@@ -9,9 +9,9 @@ part of 'isar_column.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
-const IsarColumnSchema = Schema(
-  name: r'IsarColumn',
-  id: -6838868764111322511,
+const TBColumnSchema = Schema(
+  name: r'TBColumn',
+  id: 7616871238785213250,
   properties: {
     r'color': PropertySchema(
       id: 0,
@@ -24,14 +24,14 @@ const IsarColumnSchema = Schema(
       type: IsarType.string,
     )
   },
-  estimateSize: _isarColumnEstimateSize,
-  serialize: _isarColumnSerialize,
-  deserialize: _isarColumnDeserialize,
-  deserializeProp: _isarColumnDeserializeProp,
+  estimateSize: _tBColumnEstimateSize,
+  serialize: _tBColumnSerialize,
+  deserialize: _tBColumnDeserialize,
+  deserializeProp: _tBColumnDeserializeProp,
 );
 
-int _isarColumnEstimateSize(
-  IsarColumn object,
+int _tBColumnEstimateSize(
+  TBColumn object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -41,8 +41,8 @@ int _isarColumnEstimateSize(
   return bytesCount;
 }
 
-void _isarColumnSerialize(
-  IsarColumn object,
+void _tBColumnSerialize(
+  TBColumn object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -51,19 +51,19 @@ void _isarColumnSerialize(
   writer.writeString(offsets[1], object.name);
 }
 
-IsarColumn _isarColumnDeserialize(
+TBColumn _tBColumnDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = IsarColumn();
+  final object = TBColumn();
   object.color = reader.readString(offsets[0]);
   object.name = reader.readString(offsets[1]);
   return object;
 }
 
-P _isarColumnDeserializeProp<P>(
+P _tBColumnDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -79,9 +79,9 @@ P _isarColumnDeserializeProp<P>(
   }
 }
 
-extension IsarColumnQueryFilter
-    on QueryBuilder<IsarColumn, IsarColumn, QFilterCondition> {
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorEqualTo(
+extension TBColumnQueryFilter
+    on QueryBuilder<TBColumn, TBColumn, QFilterCondition> {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -94,7 +94,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorGreaterThan(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -109,7 +109,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorLessThan(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -124,7 +124,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorBetween(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -143,7 +143,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorStartsWith(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -156,7 +156,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorEndsWith(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -169,7 +169,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorContains(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -181,7 +181,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorMatches(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -193,7 +193,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> colorIsEmpty() {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'color',
@@ -202,8 +202,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition>
-      colorIsNotEmpty() {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'color',
@@ -212,7 +211,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameEqualTo(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -225,7 +224,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameGreaterThan(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -240,7 +239,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameLessThan(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -255,7 +254,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameBetween(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -274,7 +273,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameStartsWith(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -287,7 +286,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameEndsWith(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -300,7 +299,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameContains(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -312,7 +311,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameMatches(
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -324,7 +323,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameIsEmpty() {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'name',
@@ -333,7 +332,7 @@ extension IsarColumnQueryFilter
     });
   }
 
-  QueryBuilder<IsarColumn, IsarColumn, QAfterFilterCondition> nameIsNotEmpty() {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
@@ -343,5 +342,5 @@ extension IsarColumnQueryFilter
   }
 }
 
-extension IsarColumnQueryObject
-    on QueryBuilder<IsarColumn, IsarColumn, QFilterCondition> {}
+extension TBColumnQueryObject
+    on QueryBuilder<TBColumn, TBColumn, QFilterCondition> {}

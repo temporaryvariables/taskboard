@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/views/board/edit_card.dart';
 import 'package:taskboard/views/board/edit_column.dart';
 import 'package:taskboard/views/board_container.dart';
 
-Route<Widget> openNewBoard(Item i) {
+Route<Widget> openNewBoard(TBItem i) {
   return PageRouteBuilder<Widget>(
     opaque: false,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        const BoardContainer(),
+        const Taskboard(),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       const Offset begin = Offset(0.0, 1.0);
@@ -28,15 +28,13 @@ Route<Widget> openNewBoard(Item i) {
   );
 }
 
-Route<Widget> openEditCard(Item item) {
+Route<Widget> openEditCard(TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        EditCard(
-      item: item
-    ),
+        EditTaskboardCard(item: item),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       const Offset begin = Offset(0.0, 1.0);
@@ -54,13 +52,13 @@ Route<Widget> openEditCard(Item item) {
   );
 }
 
-Route<Widget> openEditColumn(int index, Item item) {
+Route<Widget> openEditColumn(int index, TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        EditColumn(
+        EditTaskboardColumn(
       item: item,
       index: index,
     ),

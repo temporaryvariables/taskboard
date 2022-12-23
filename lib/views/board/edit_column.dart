@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/edit_card.dart';
 
@@ -28,17 +28,18 @@ const List<Color> colors = [
   Color(0xFFFFFFFF) // white
 ];
 
-class EditColumn extends StatefulWidget {
-  const EditColumn({super.key, required this.index, required this.item});
+class EditTaskboardColumn extends StatefulWidget {
+  const EditTaskboardColumn(
+      {super.key, required this.index, required this.item});
 
-  final Item item;
+  final TBItem item;
   final int index;
 
   @override
-  State<EditColumn> createState() => _EditColumnState();
+  State<EditTaskboardColumn> createState() => _EditTaskboardColumnState();
 }
 
-class _EditColumnState extends State<EditColumn> {
+class _EditTaskboardColumnState extends State<EditTaskboardColumn> {
   late String selectedColor;
   TextEditingController columnName = TextEditingController();
 

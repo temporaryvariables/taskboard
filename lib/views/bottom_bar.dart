@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 
-class BoardBottomBar extends StatelessWidget {
-  const BoardBottomBar({
+class TaskboardBottomBar extends StatelessWidget {
+  const TaskboardBottomBar({
     Key? key,
     required FocusNode contextFocus,
   })  : _contextFocus = contextFocus,
@@ -41,7 +41,7 @@ class BoardBottomBar extends StatelessWidget {
                         var itemIdString = text.replaceFirst("\\r", "").trim();
                         var itemId = int.tryParse(itemIdString);
                         if (itemId != null) {
-                          Item? itemToDelete =
+                          TBItem? itemToDelete =
                               await currentState.getItemFromId(itemId);
                           if (itemToDelete != null) {
                             currentState.deleteItemRecursivily(itemToDelete);
@@ -73,7 +73,7 @@ class BoardBottomBar extends StatelessWidget {
                         var itemIdString = text.replaceFirst("\\o", "").trim();
                         var itemId = int.tryParse(itemIdString);
                         if (itemId != null) {
-                          Item? itemToDelete =
+                          TBItem? itemToDelete =
                               await currentState.getItemFromId(itemId);
                           if (itemToDelete != null) {
                             currentState.setBoard(itemToDelete);

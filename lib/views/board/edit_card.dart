@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/helper.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
 
-class EditCard extends StatefulWidget {
-  const EditCard({super.key, required this.item});
+class EditTaskboardCard extends StatefulWidget {
+  const EditTaskboardCard({super.key, required this.item});
 
-  final Item item;
+  final TBItem item;
 
   @override
-  State<EditCard> createState() => _EditCardState();
+  State<EditTaskboardCard> createState() => _EditTaskboardCardState();
 }
 
-class _EditCardState extends State<EditCard> {
+class _EditTaskboardCardState extends State<EditTaskboardCard> {
   TextEditingController textController = TextEditingController();
   TextEditingController boardName = TextEditingController();
   TextEditingController dueDate = TextEditingController();

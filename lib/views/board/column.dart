@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/models/isar_models/isar_column.dart';
-import 'package:taskboard/models/isar_models/item.dart';
+import 'package:taskboard/models/isar_models/tb_column.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/card.dart';
 
 enum Menu { addLeft, addRight, remove, edit }
 
-class BoardColumn extends StatelessWidget {
-  const BoardColumn({
+class TaskboardColumn extends StatelessWidget {
+  const TaskboardColumn({
     Key? key,
     required this.column,
     required this.itemsInColumn,
   }) : super(key: key);
 
-  final IsarColumn column;
-  final List<Item> itemsInColumn;
+  final TBColumn column;
+  final List<TBItem> itemsInColumn;
 
   String get columnName => column.name;
 
@@ -28,7 +28,7 @@ class BoardColumn extends StatelessWidget {
       decoration: BoxDecoration(border: Border.all(color: Colors.black12)),
       child: Padding(
         padding: const EdgeInsets.all(1),
-        child: DragTarget<Item>(
+        child: DragTarget<TBItem>(
           onWillAccept: (data) {
             if (data == null) return false;
             return data.column != columnName;
@@ -60,11 +60,11 @@ class BoardColumn extends StatelessWidget {
                               .indexOf(columnName);
                           switch (item) {
                             case Menu.addLeft:
-                              var isarColumn = IsarColumn();
+                              var isarColumn = TBColumn();
                               await state.addColumn(index, isarColumn);
                               break;
                             case Menu.addRight:
-                              var isarColumn = IsarColumn();
+                              var isarColumn = TBColumn();
                               await state.addColumn(index + 1, isarColumn);
                               break;
                             case Menu.edit:
@@ -112,8 +112,8 @@ class BoardColumn extends StatelessWidget {
                     itemCount: itemsInColumn.length,
                     itemBuilder: (context, index) {
                       var item = itemsInColumn[index];
-                      var card = BoardCard(column: column, item: item);
-                      return Draggable<Item>(
+                      var card = TaskboardCard(column: column, item: item);
+                      return Draggable<TBItem>(
                         data: item,
                         feedback: card,
                         childWhenDragging: Opacity(

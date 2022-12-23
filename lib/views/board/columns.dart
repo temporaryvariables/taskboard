@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/column.dart';
 
-class BoardColumns extends StatelessWidget {
-  const BoardColumns({
+class TaskboardColumns extends StatelessWidget {
+  const TaskboardColumns({
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +36,7 @@ class BoardColumns extends StatelessWidget {
                     itemsInColumn.sort(
                       (a, b) => a.order.compareTo(b.order),
                     );
-                    return BoardColumn(
+                    return TaskboardColumn(
                         column: column, itemsInColumn: itemsInColumn);
                   },
                 ),

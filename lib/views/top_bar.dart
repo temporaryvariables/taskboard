@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/state/app_state.dart';
 
-class BoardTopBar extends StatelessWidget with PreferredSizeWidget {
-  const BoardTopBar({Key? key}) : super(key: key);
+class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
+  const TaskboardTopBar({Key? key}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

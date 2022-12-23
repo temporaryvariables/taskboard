@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:taskboard/models/isar_models/isar_column.dart';
+import 'package:taskboard/models/isar_models/tb_column.dart';
 
-part 'item.g.dart';
+part 'tb_item.g.dart';
 
-const List<IsarColumn> defaultColumns = [];
+const List<TBColumn> defaultColumns = [];
 
 @collection
-class Item {
+class TBItem {
   Id id = Isar.autoIncrement;
   late DateTime createdDate;
   late DateTime lastUpdated;
@@ -17,25 +17,25 @@ class Item {
   String column;
   int order;
   String? boardName;
-  late List<IsarColumn> boardColumns;
-  IsarLink<Item> parentItem = IsarLink<Item>();
-  IsarLinks<Item> boardItems = IsarLinks<Item>();
+  late List<TBColumn> boardColumns;
+  IsarLink<TBItem> parentItem = IsarLink<TBItem>();
+  IsarLinks<TBItem> boardItems = IsarLinks<TBItem>();
 
-  Item(this.text, this.column, this.order) {
+  TBItem(this.text, this.column, this.order) {
     var now = DateTime.now();
     createdDate = now;
     lastUpdated = now;
     boardName = text;
 
-    var backlog = IsarColumn();
+    var backlog = TBColumn();
     backlog.name = "Backlog";
     backlog.color = Colors.grey.value.toString();
 
-    var inProgress = IsarColumn();
+    var inProgress = TBColumn();
     inProgress.name = "In Progress";
     inProgress.color = Colors.blue.value.toString();
 
-    var done = IsarColumn();
+    var done = TBColumn();
     done.name = "Done";
     done.color = Colors.green.value.toString();
 
