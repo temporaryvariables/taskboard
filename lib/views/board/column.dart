@@ -79,18 +79,22 @@ class BoardColumn extends StatelessWidget {
                         },
                         itemBuilder: (context) => [
                           const PopupMenuItem<Menu>(
+                            height: 25,
                             value: Menu.addLeft,
                             child: Text('Add Left'),
                           ),
                           const PopupMenuItem<Menu>(
+                            height: 25,
                             value: Menu.addRight,
                             child: Text('Add Right'),
                           ),
                           const PopupMenuItem<Menu>(
+                            height: 25,
                             value: Menu.edit,
                             child: Text('Edit'),
                           ),
                           PopupMenuItem<Menu>(
+                            height: 25,
                             enabled: itemsInColumn.isEmpty,
                             value: Menu.remove,
                             child: const Text('Remove'),
@@ -108,7 +112,7 @@ class BoardColumn extends StatelessWidget {
                     itemCount: itemsInColumn.length,
                     itemBuilder: (context, index) {
                       var item = itemsInColumn[index];
-                      var card = BoardCard(item: item);
+                      var card = BoardCard(column: column, item: item);
                       return Draggable<Item>(
                         data: item,
                         feedback: card,

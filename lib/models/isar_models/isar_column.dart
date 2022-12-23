@@ -6,7 +6,7 @@ part "isar_column.g.dart";
 @embedded
 class IsarColumn {
   String name = "default";
-  String color = Colors.blue.toString();
+  String color = Colors.blue.value.toString();
 
   Color get colorAsColor => Color(int.parse(color));
 }

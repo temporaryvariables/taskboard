@@ -28,15 +28,14 @@ Route<Widget> openNewBoard(Item i) {
   );
 }
 
-Route<Widget> openEditCard(Item item, Color color) {
+Route<Widget> openEditCard(Item item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
         EditCard(
-      item: item,
-      color: color,
+      item: item
     ),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
