@@ -5,7 +5,7 @@ import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/card.dart';
-import 'package:taskboard/views/helper_widgets/column_menu.dart';
+import 'package:taskboard/views/others/column_menu.dart';
 
 class TaskboardColumn extends StatelessWidget {
   const TaskboardColumn({

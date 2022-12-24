@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/helper_widgets/dialog_box.dart';
-import 'package:taskboard/views/helper_widgets/textfield.dart';
+import 'package:taskboard/views/others/dialog_box.dart';
+import 'package:taskboard/views/others/textfield.dart';
 
 class EditTaskboardCard extends StatefulWidget {
   const EditTaskboardCard({super.key, required this.item});
