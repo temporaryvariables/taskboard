@@ -13,10 +13,10 @@ const TBColumnSchema = Schema(
   name: r'TBColumn',
   id: 7616871238785213250,
   properties: {
-    r'color': PropertySchema(
+    r'colorAsInt': PropertySchema(
       id: 0,
-      name: r'color',
-      type: IsarType.string,
+      name: r'colorAsInt',
+      type: IsarType.long,
     ),
     r'name': PropertySchema(
       id: 1,
@@ -36,7 +36,6 @@ int _tBColumnEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.color.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -47,7 +46,7 @@ void _tBColumnSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.color);
+  writer.writeLong(offsets[0], object.colorAsInt);
   writer.writeString(offsets[1], object.name);
 }
 
@@ -58,7 +57,7 @@ TBColumn _tBColumnDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TBColumn();
-  object.color = reader.readString(offsets[0]);
+  object.colorAsInt = reader.readLong(offsets[0]);
   object.name = reader.readString(offsets[1]);
   return object;
 }
@@ -71,7 +70,7 @@ P _tBColumnDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     default:
@@ -81,132 +80,55 @@ P _tBColumnDeserializeProp<P>(
 
 extension TBColumnQueryFilter
     on QueryBuilder<TBColumn, TBColumn, QFilterCondition> {
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorAsIntEqualTo(
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'color',
+        property: r'colorAsInt',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorGreaterThan(
-    String value, {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorAsIntGreaterThan(
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'color',
+        property: r'colorAsInt',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorLessThan(
-    String value, {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorAsIntLessThan(
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'color',
+        property: r'colorAsInt',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorAsIntBetween(
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'color',
+        property: r'colorAsInt',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'color',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'color',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'color',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'color',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'color',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TBColumn, TBColumn, QAfterFilterCondition> colorIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'color',
-        value: '',
       ));
     });
   }

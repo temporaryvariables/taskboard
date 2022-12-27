@@ -17,6 +17,7 @@ class TBItem {
   String column;
   int order;
   String? boardName;
+  String viewType = "Board";
   late List<TBColumn> boardColumns;
   IsarLink<TBItem> parentItem = IsarLink<TBItem>();
   IsarLinks<TBItem> boardItems = IsarLinks<TBItem>();
@@ -29,18 +30,21 @@ class TBItem {
 
     var backlog = TBColumn();
     backlog.name = "Backlog";
-    backlog.color = Colors.grey.value.toString();
+    backlog.color = Colors.grey;
 
     var inProgress = TBColumn();
     inProgress.name = "In Progress";
-    inProgress.color = Colors.blue.value.toString();
+    inProgress.color = Colors.blue;
 
     var done = TBColumn();
     done.name = "Done";
-    done.color = Colors.green.value.toString();
+    done.color = Colors.green;
 
     boardColumns = [backlog, inProgress, done];
   }
+
+  @ignore
+  String get itemDisplayString => "[$id] $text";
 
   List<String> get boardColumnsAsStrings {
     return boardColumns.map((e) => e.name).toList();

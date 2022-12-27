@@ -6,8 +6,12 @@ part "tb_column.g.dart";
 @embedded
 class TBColumn {
   String name = "default";
-  String color = Colors.black.value.toString();
+  int colorAsInt = Colors.black.value;
 
   @ignore
-  Color get colorAsColor => Color(int.parse(color));
+  Color get color => Color(colorAsInt);
+
+  set color(Color color) {
+    colorAsInt = color.value;
+  }
 }

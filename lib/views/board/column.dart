@@ -48,7 +48,7 @@ class TaskboardColumn extends StatelessWidget {
                     itemCount: itemsInColumn.length,
                     itemBuilder: (context, index) {
                       var item = itemsInColumn[index];
-                      var columnColor = Color(int.parse(column.color));
+                      var columnColor = column.color;
                       var itemCard =
                           TaskboardCard(columnColor: columnColor, item: item);
                       return Draggable<TBItem>(

@@ -72,6 +72,11 @@ const TBItemSchema = CollectionSchema(
       id: 10,
       name: r'text',
       type: IsarType.string,
+    ),
+    r'viewType': PropertySchema(
+      id: 11,
+      name: r'viewType',
+      type: IsarType.string,
     )
   },
   estimateSize: _tBItemEstimateSize,
@@ -130,6 +135,7 @@ int _tBItemEstimateSize(
   }
   bytesCount += 3 + object.column.length * 3;
   bytesCount += 3 + object.text.length * 3;
+  bytesCount += 3 + object.viewType.length * 3;
   return bytesCount;
 }
 
@@ -155,6 +161,7 @@ void _tBItemSerialize(
   writer.writeLong(offsets[8], object.order);
   writer.writeDouble(offsets[9], object.priority);
   writer.writeString(offsets[10], object.text);
+  writer.writeString(offsets[11], object.viewType);
 }
 
 TBItem _tBItemDeserialize(
@@ -181,6 +188,7 @@ TBItem _tBItemDeserialize(
   object.id = id;
   object.lastUpdated = reader.readDateTime(offsets[7]);
   object.priority = reader.readDoubleOrNull(offsets[9]);
+  object.viewType = reader.readString(offsets[11]);
   return object;
 }
 
@@ -218,6 +226,8 @@ P _tBItemDeserializeProp<P>(
     case 9:
       return (reader.readDoubleOrNull(offset)) as P;
     case 10:
+      return (reader.readString(offset)) as P;
+    case 11:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1443,6 +1453,136 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'viewType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'viewType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'viewType',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'viewType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> viewTypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'viewType',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension TBItemQueryObject on QueryBuilder<TBItem, TBItem, QFilterCondition> {
@@ -1634,6 +1774,18 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
       return query.addSortBy(r'text', Sort.desc);
     });
   }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByViewType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByViewTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewType', Sort.desc);
+    });
+  }
 }
 
 extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
@@ -1756,6 +1908,18 @@ extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
       return query.addSortBy(r'text', Sort.desc);
     });
   }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByViewType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByViewTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'viewType', Sort.desc);
+    });
+  }
 }
 
 extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
@@ -1819,6 +1983,13 @@ extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'text', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByViewType(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'viewType', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1895,6 +2066,12 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
   QueryBuilder<TBItem, String, QQueryOperations> textProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'text');
+    });
+  }
+
+  QueryBuilder<TBItem, String, QQueryOperations> viewTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'viewType');
     });
   }
 }

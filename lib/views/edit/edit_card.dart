@@ -99,7 +99,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      itemDueDateController.text == "NA";
+                      itemDueDateController.text = "NA";
                     });
                   },
                   child: const Icon(Icons.refresh, color: Colors.grey),
@@ -196,10 +196,14 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                         : item.boardName;
                     if (!itemDueDateController.text.contains("NA")) {
                       item.dueDate = selectedDate;
+                    } else {
+                      item.dueDate = null;
                     }
                     if (selectedPriority != null) {
                       item.priority =
                           double.parse(selectedPriority!.toStringAsFixed(1));
+                    } else {
+                      item.priority = null;
                     }
                     Provider.of<AppState>(context, listen: false).addItem(item);
                     Navigator.pop(context);

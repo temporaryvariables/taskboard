@@ -32,6 +32,7 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: item.boardColumns.length,
         itemBuilder: (context, index) {
+          var tBColumn = item.boardColumns[index];
           var columnItems = item.boardItems.toList();
           columnItems = columnItems
               .where(
@@ -54,7 +55,7 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
                       child: Container(
                         height: 25,
                         width: double.infinity,
-                        color: colors[index].withOpacity(0.90),
+                        color: tBColumn.color.withOpacity(0.90),
                         child: Center(
                           child: Text(
                             "+${columnItems.length - 3}",
@@ -72,7 +73,7 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
                       child: Container(
                         height: 25,
                         width: double.infinity,
-                        color: colors[index].withOpacity(0.90),
+                        color: tBColumn.color,
                       ),
                     ),
                   );

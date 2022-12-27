@@ -7,19 +7,18 @@ class AppState with ChangeNotifier {
   late Isar isarInstance;
   TextEditingController cliController = TextEditingController();
 
-  late TBItem parentItem;
+  late TBItem currentItem;
   late List<TBItem> childItems;
 
   static final TBItem badItem = TBItem("Item not found :(", "", 0);
 
   AppState(Isar isarInsatnce, TBItem? mainItem) {
     isarInstance = isarInsatnce;
-    parentItem = mainItem ?? badItem;
-    childItems = parentItem.boardItems.toList();
+    currentItem = mainItem ?? badItem;
+    childItems = currentItem.boardItems.toList();
 
     cliController.addListener(() {
-      if (cliController.text.length > 2 &&
-          !cliController.text.startsWith('\\')) {
+      if (!cliController.text.startsWith('\\')) {
         notifyListeners();
       }
     });
@@ -34,16 +33,16 @@ class AppState with ChangeNotifier {
 
   void watchParent() {
     isarInstance.tBItems
-        .watchObject(parentItem.id, fireImmediately: true)
+        .watchObject(currentItem.id, fireImmediately: true)
         .listen(
       (event) async {
-        parentItem = (await isarInstance.tBItems
+        currentItem = (await isarInstance.tBItems
                 .where()
                 .filter()
-                .idEqualTo(parentItem.id)
+                .idEqualTo(currentItem.id)
                 .findFirst()) ??
             badItem;
-        childItems = parentItem.boardItems.toList();
+        childItems = currentItem.boardItems.toList();
         notifyListeners();
       },
     );
@@ -52,39 +51,39 @@ class AppState with ChangeNotifier {
   void watchChild(int id) {
     isarInstance.tBItems.watchObject(id, fireImmediately: true).listen(
       (event) async {
-        parentItem = (await isarInstance.tBItems
+        currentItem = (await isarInstance.tBItems
                 .where()
                 .filter()
-                .idEqualTo(parentItem.id)
+                .idEqualTo(currentItem.id)
                 .findFirst()) ??
             badItem;
-        childItems = parentItem.boardItems.toList();
+        childItems = currentItem.boardItems.toList();
         notifyListeners();
       },
     );
   }
 
   void watchChildren() {
-    for (var children in parentItem.boardItems) {
+    for (var children in currentItem.boardItems) {
       watchChild(children.id);
     }
   }
 
   Future<void> setBoard(TBItem item) async {
-    parentItem = (await isarInstance.tBItems
+    currentItem = (await isarInstance.tBItems
             .where()
             .filter()
             .idEqualTo(item.id)
             .findFirst()) ??
         badItem;
-    childItems = parentItem.boardItems.toList();
+    childItems = currentItem.boardItems.toList();
 
     reWatch();
     notifyListeners();
   }
 
   String getFullPath() {
-    TBItem? pointer = parentItem;
+    TBItem? pointer = currentItem;
     String path = "";
     while (pointer != null) {
       path = "\\${pointer.boardName}$path";
@@ -94,19 +93,19 @@ class AppState with ChangeNotifier {
   }
 
   Future<int> addItemWithText(String text) async {
-    var column = parentItem.boardColumns.first.name;
-    var order = parentItem.boardItems
+    var column = currentItem.boardColumns.first.name;
+    var order = currentItem.boardItems
         .toList()
         .where((element) => element.column == column)
         .length;
     var i = TBItem(text, column, order);
-    i.parentItem.value = parentItem;
+    i.parentItem.value = currentItem;
     i.boardName = text;
     var id = -1;
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(i);
-      parentItem.boardItems.add(i);
-      await parentItem.boardItems.save();
+      currentItem.boardItems.add(i);
+      await currentItem.boardItems.save();
       await i.parentItem.save();
     });
     watchChild(id);
@@ -121,7 +120,16 @@ class AppState with ChangeNotifier {
       id = await isarInstance.tBItems.put(i);
     });
     watchChild(id);
-    // notifyListeners();
+    return id;
+  }
+
+  Future<int> toggleViewType(bool value) async {
+    var i = currentItem;
+    i.viewType = (value) ? "List" : "Board";
+    var id = -1;
+    await isarInstance.writeTxn(() async {
+      id = await isarInstance.tBItems.put(i);
+    });
     return id;
   }
 
@@ -177,31 +185,31 @@ class AppState with ChangeNotifier {
   }
 
   Future<int> addColumn(int index, TBColumn column) async {
-    var parentColumns = parentItem.boardColumns;
+    var parentColumns = currentItem.boardColumns;
     var length = parentColumns.length;
     List<TBColumn> columns = [
       ...parentColumns.getRange(0, index),
       column,
       ...parentColumns.getRange(index, length)
     ];
-    parentItem.boardColumns = columns;
+    currentItem.boardColumns = columns;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.tBItems.put(parentItem);
+      id = await isarInstance.tBItems.put(currentItem);
     });
     // notifyListeners();
     return id;
   }
 
   Future<int> removeColumn(int index) async {
-    var parentColumns = parentItem.boardColumns;
+    var parentColumns = currentItem.boardColumns;
     var columns = parentColumns
         .where((element) => element != parentColumns[index])
         .toList();
-    parentItem.boardColumns = columns;
+    currentItem.boardColumns = columns;
     var id = -1;
     await isarInstance.writeTxn(() async {
-      id = await isarInstance.tBItems.put(parentItem);
+      id = await isarInstance.tBItems.put(currentItem);
     });
     // notifyListeners();
     return id;
@@ -216,7 +224,7 @@ class AppState with ChangeNotifier {
 
   Future<void> moveItemToColumn(TBItem i, String toColumn) async {
     var fromColumn = i.column;
-    i.order = parentItem.boardItems
+    i.order = currentItem.boardItems
         .toList()
         .where((element) => element.column == toColumn)
         .length;
@@ -225,7 +233,7 @@ class AppState with ChangeNotifier {
       await isarInstance.tBItems.put(i);
     });
 
-    var updatingItems = parentItem.boardItems
+    var updatingItems = currentItem.boardItems
         .toList()
         .where((element) => element.column == fromColumn && element.id != i.id)
         .toList();

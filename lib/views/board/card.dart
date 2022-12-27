@@ -19,13 +19,11 @@ class TaskboardCard extends StatelessWidget {
     return SizedBox(
       width: cardWidth,
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(context, openEditCard(item));
-        },
-        onDoubleTap: () async {
-          var nav = Navigator.of(context);
+        onTap: () async {
           await Provider.of<AppState>(context, listen: false).setBoard(item);
-          nav.push(openNewBoard(item));
+        },
+        onDoubleTap: () {
+          Navigator.push(context, openEditCard(item));
         },
         child: Card(
           elevation: 0,

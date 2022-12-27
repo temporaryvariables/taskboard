@@ -33,7 +33,7 @@ class TaskBoardColumnHeader extends StatelessWidget {
             onSelected: (Menu item) async {
               var state = Provider.of<AppState>(context, listen: false);
               var index =
-                  state.parentItem.boardColumnsAsStrings.indexOf(columnName);
+                  state.currentItem.boardColumnsAsStrings.indexOf(columnName);
               switch (item) {
                 case Menu.addLeft:
                   var isarColumn = TBColumn();
@@ -45,7 +45,7 @@ class TaskBoardColumnHeader extends StatelessWidget {
                   break;
                 case Menu.edit:
                   Navigator.push(
-                      context, openEditColumn(index, state.parentItem));
+                      context, openEditColumn(index, state.currentItem));
                   break;
                 case Menu.remove:
                   await state.removeColumn(index);

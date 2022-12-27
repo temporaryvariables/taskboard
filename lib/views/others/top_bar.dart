@@ -12,21 +12,43 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (context, appState, child) {
+        var parentItem = appState.currentItem.parentItem.value;
         return AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
-          title: Text(
-            appState.getFullPath(),
-            style: const TextStyle(color: Colors.black),
+          title: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    appState.getFullPath(),
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Switch(
+                value: appState.currentItem.viewType != "Board",
+                onChanged: (value) {
+                  appState.toggleViewType(value);
+                },
+              ),
+            ],
           ),
+          leadingWidth: 28,
           leading: GestureDetector(
             onTap: () async {
-              Navigator.pop(context);
-              await appState.setBoard(appState.parentItem.parentItem.value!);
+              if (parentItem != null) {
+                await appState.setBoard(parentItem);
+              }
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Icon(
+                parentItem != null ? Icons.arrow_back_ios : Icons.home,
+                color: Colors.black,
+              ),
             ),
           ),
         );
