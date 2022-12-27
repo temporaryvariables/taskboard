@@ -29,6 +29,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                 ),
               ),
               Switch(
+                activeColor: Colors.black,
                 value: appState.currentItem.viewType != "Board",
                 onChanged: (value) {
                   appState.toggleViewType(value);

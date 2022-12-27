@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/routes.dart';
 import 'package:taskboard/state/app_state.dart';
 
 class TaskboardBottomBar extends StatelessWidget {
@@ -77,7 +76,6 @@ class TaskboardBottomBar extends StatelessWidget {
                               await currentState.getItemFromId(itemId);
                           if (itemToDelete != null) {
                             currentState.setBoard(itemToDelete);
-                            // nav.push(openNewBoard(itemToDelete));
                           }
                         }
                       } else if (text.startsWith("\\b")) {

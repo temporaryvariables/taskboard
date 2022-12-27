@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
@@ -12,15 +13,6 @@ class TaskboardColumns extends StatelessWidget {
   const TaskboardColumns({
     Key? key,
   }) : super(key: key);
-
-  // void sortItems(List<TBItem> objects) {
-  //   objects.sort((a, b) {
-  //     if (a.priority != b.priority) {
-  //       return a.priority.compareTo(b.priority);
-  //     }
-  //     return a.order.compareTo(b.order);
-  //   });
-  // }
 
   void sortTBItems(List<TBItem> objects) {
     objects.sort((a, b) {
@@ -45,6 +37,7 @@ class TaskboardColumns extends StatelessWidget {
     return Expanded(
       child: Consumer<AppState>(
         builder: (_, appState, __) {
+          var isSmall = MediaQuery.of(context).size.width < minScreen;
           if (appState.currentItem.viewType == "List") {
             if (appState.currentItem.boardColumns.length == 1) {
               var columnColor = appState.currentItem.boardColumns.first.color;
@@ -75,7 +68,9 @@ class TaskboardColumns extends StatelessWidget {
 
               if (columns.length == 2) {
                 return Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: isSmall
+                      ? const EdgeInsets.all(4)
+                      : const EdgeInsets.all(10),
                   child: ListView.builder(
                     itemCount: appState.currentItem.boardItems.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -108,8 +103,9 @@ class TaskboardColumns extends StatelessWidget {
                                 ),
                               ),
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                padding: isSmall
+                                    ? const EdgeInsets.all(4)
+                                    : const EdgeInsets.all(10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -142,31 +138,32 @@ class TaskboardColumns extends StatelessWidget {
                                                   fontSize: 18,
                                                 ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  if (item.dueDate != null)
-                                                    Text(
-                                                      "Due Date: ${getFormatedDate(item.dueDate)}",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                          fontSize: 12),
-                                                    ),
-                                                  if (item.dueDate != null &&
-                                                      item.priority != null)
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                  if (item.priority != null)
-                                                    Text(
-                                                      "Priority: ${item.priority.toString()}",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                          fontSize: 12),
-                                                    ),
-                                                ],
-                                              ),
+                                              if (!isSmall)
+                                                Row(
+                                                  children: [
+                                                    if (item.dueDate != null)
+                                                      Text(
+                                                        "Due Date: ${getFormatedDate(item.dueDate)}",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    if (item.dueDate != null &&
+                                                        item.priority != null)
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                    if (item.priority != null)
+                                                      Text(
+                                                        "Priority: ${item.priority.toString()}",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                  ],
+                                                ),
                                             ],
                                           ),
                                         ),

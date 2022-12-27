@@ -6,6 +6,8 @@ const double cardWidth = 250;
 
 enum Menu { addLeft, addRight, remove, edit }
 
+const double minScreen = 450;
+
 const List<Color> colors = [
   Color(0xFFF44336), // red
   Color(0xFFE91E63), // pink
