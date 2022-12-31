@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
+import 'package:taskboard/main.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 
@@ -69,6 +70,14 @@ class AppState with ChangeNotifier {
     }
   }
 
+  Future<void> setMainBoard() async {
+    var mainItem =
+        await isarInstance.tBItems.filter().orderEqualTo(-1).findFirst();
+    if (mainItem != null) {
+      await setBoard(mainItem);
+    }
+  }
+
   Future<void> setBoard(TBItem item) async {
     currentItem = (await isarInstance.tBItems
             .where()
@@ -82,14 +91,14 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  String getFullPath() {
+  List<TBItem> getFullPath() {
     TBItem? pointer = currentItem;
-    String path = "";
+    List<TBItem> boardItems = [];
     while (pointer != null) {
-      path = "\\${pointer.boardName}$path";
+      boardItems.add(pointer);
       pointer = pointer.parentItem.value;
     }
-    return path;
+    return boardItems.reversed.toList();
   }
 
   Future<int> addItemWithText(String text) async {

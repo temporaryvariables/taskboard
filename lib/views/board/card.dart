@@ -50,7 +50,7 @@ class TaskboardCard extends StatelessWidget {
                       child: Text(
                         "[${item.id}] ${item.text}",
                         overflow: TextOverflow.clip,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
                     if (item.dueDate != null || item.priority != null)

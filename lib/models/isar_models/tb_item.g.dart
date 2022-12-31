@@ -127,12 +127,7 @@ int _tBItemEstimateSize(
       bytesCount += value.length * 3;
     }
   }
-  {
-    final value = object.boardName;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.boardName.length * 3;
   bytesCount += 3 + object.column.length * 3;
   bytesCount += 3 + object.text.length * 3;
   bytesCount += 3 + object.viewType.length * 3;
@@ -182,7 +177,7 @@ TBItem _tBItemDeserialize(
         TBColumn(),
       ) ??
       [];
-  object.boardName = reader.readStringOrNull(offsets[2]);
+  object.boardName = reader.readString(offsets[2]);
   object.createdDate = reader.readDateTime(offsets[4]);
   object.dueDate = reader.readDateTimeOrNull(offsets[5]);
   object.id = id;
@@ -210,7 +205,7 @@ P _tBItemDeserializeProp<P>(
     case 1:
       return (reader.readStringList(offset) ?? []) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
@@ -639,24 +634,8 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'boardName',
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'boardName',
-      ));
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -669,7 +648,7 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
   }
 
   QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -684,7 +663,7 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
   }
 
   QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -699,8 +678,8 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
   }
 
   QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -2015,7 +1994,7 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
     });
   }
 
-  QueryBuilder<TBItem, String?, QQueryOperations> boardNameProperty() {
+  QueryBuilder<TBItem, String, QQueryOperations> boardNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'boardName');
     });

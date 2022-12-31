@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:taskboard/models/isar_models/tb_item.dart';
 
 const List<String> defaultColumns = ["Backlog", "In Progress", "Done"];
+TBItem defaultItem = TBItem("404: Item not found", "default", -1);
 
 const double cardWidth = 250;
 
 enum Menu { addLeft, addRight, remove, edit }
 
 const double minScreen = 450;
+
+const IconData listIcon = Icons.list_alt;
+const IconData mainIcon = Icons.home_filled;
+const IconData leftArrowIcon = Icons.arrow_back;
+
+const Color iconDisabled = Colors.black26;
+const Color iconEnabled = Colors.black;
+
+const Color textBlack = Colors.black;
+const Color textLightBlack = Colors.black26;
+const Color backgroundWhite = Colors.white;
 
 const List<Color> colors = [
   Color(0xFFF44336), // red

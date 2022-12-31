@@ -89,6 +89,32 @@ flutter:
         - asset: assets\fonts\inco\Inconsolata-Medium.ttf
         - asset: assets\fonts\inco\Inconsolata-Regular.ttf
         - asset: assets\fonts\inco\Inconsolata-SemiBold.ttf
+    - family: Robo
+      fonts:
+        - asset: assets\fonts\robo\Roboto-Black.ttf
+        - asset: assets\fonts\robo\Roboto-BlackItalic.ttf
+        - asset: assets\fonts\robo\Roboto-Bold.ttf
+        - asset: assets\fonts\robo\Roboto-BoldItalic.ttf
+        - asset: assets\fonts\robo\Roboto-Italic.ttf
+        - asset: assets\fonts\robo\Roboto-Light.ttf
+        - asset: assets\fonts\robo\Roboto-LightItalic.ttf
+        - asset: assets\fonts\robo\Roboto-Medium.ttf
+        - asset: assets\fonts\robo\Roboto-MediumItalic.ttf
+        - asset: assets\fonts\robo\Roboto-Regular.ttf
+        - asset: assets\fonts\robo\Roboto-Thin.ttf
+        - asset: assets\fonts\robo\Roboto-ThinItalic.ttf
+    - family: Lato
+      fonts:
+        - asset: assets\fonts\lato\Lato-Black.ttf
+        - asset: assets\fonts\lato\Lato-BlackItalic.ttf
+        - asset: assets\fonts\lato\Lato-Bold.ttf
+        - asset: assets\fonts\lato\Lato-BoldItalic.ttf
+        - asset: assets\fonts\lato\Lato-Italic.ttf
+        - asset: assets\fonts\lato\Lato-Light.ttf
+        - asset: assets\fonts\lato\Lato-LightItalic.ttf
+        - asset: assets\fonts\lato\Lato-Regular.ttf
+        - asset: assets\fonts\lato\Lato-Thin.ttf
+        - asset: assets\fonts\lato\Lato-ThinItalic.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -16,7 +16,7 @@ class TBItem {
   double? priority;
   String column;
   int order;
-  String? boardName;
+  late String boardName;
   String viewType = "Board";
   late List<TBColumn> boardColumns;
   IsarLink<TBItem> parentItem = IsarLink<TBItem>();

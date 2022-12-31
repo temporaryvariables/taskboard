@@ -39,7 +39,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "Inco"),
+      theme: ThemeData(fontFamily: "Lato"),
       home: const Taskboard(),
     );
   }
