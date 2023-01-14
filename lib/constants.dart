@@ -11,7 +11,6 @@ enum Menu { addLeft, addRight, remove, edit }
 const double minScreen = 450;
 
 const IconData listIcon = Icons.list_alt;
-const IconData mainIcon = Icons.home_filled;
 const IconData leftArrowIcon = Icons.arrow_back;
 
 const Color iconDisabled = Colors.black26;
@@ -20,6 +19,8 @@ const Color iconEnabled = Colors.black;
 const Color textBlack = Colors.black;
 const Color textLightBlack = Colors.black26;
 const Color backgroundWhite = Colors.white;
+const Color backgroundLightWhite = Color.fromARGB(179, 222, 220, 220);
+const Color backgroundTodayWhite = Color.fromARGB(179, 241, 226, 226);
 
 const List<Color> colors = [
   Color(0xFFF44336), // red

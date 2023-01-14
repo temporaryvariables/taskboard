@@ -21,7 +21,11 @@ class TaskboardColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: cardWidth * 1.05,
-      decoration: BoxDecoration(border: Border.all(color: Colors.black12)),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black12,
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(1),
         child: DragTarget<TBItem>(

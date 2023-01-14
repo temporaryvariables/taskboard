@@ -28,53 +28,48 @@ const TBItemSchema = CollectionSchema(
       name: r'boardColumnsAsStrings',
       type: IsarType.stringList,
     ),
-    r'boardName': PropertySchema(
-      id: 2,
-      name: r'boardName',
-      type: IsarType.string,
-    ),
     r'column': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'column',
       type: IsarType.string,
     ),
     r'createdDate': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'createdDate',
       type: IsarType.dateTime,
     ),
     r'dueDate': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
     r'hashCode': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'hashCode',
       type: IsarType.long,
     ),
     r'lastUpdated': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'lastUpdated',
       type: IsarType.dateTime,
     ),
     r'order': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'order',
       type: IsarType.long,
     ),
     r'priority': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'priority',
       type: IsarType.double,
     ),
     r'text': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'text',
       type: IsarType.string,
     ),
     r'viewType': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'viewType',
       type: IsarType.string,
     )
@@ -127,7 +122,6 @@ int _tBItemEstimateSize(
       bytesCount += value.length * 3;
     }
   }
-  bytesCount += 3 + object.boardName.length * 3;
   bytesCount += 3 + object.column.length * 3;
   bytesCount += 3 + object.text.length * 3;
   bytesCount += 3 + object.viewType.length * 3;
@@ -147,16 +141,15 @@ void _tBItemSerialize(
     object.boardColumns,
   );
   writer.writeStringList(offsets[1], object.boardColumnsAsStrings);
-  writer.writeString(offsets[2], object.boardName);
-  writer.writeString(offsets[3], object.column);
-  writer.writeDateTime(offsets[4], object.createdDate);
-  writer.writeDateTime(offsets[5], object.dueDate);
-  writer.writeLong(offsets[6], object.hashCode);
-  writer.writeDateTime(offsets[7], object.lastUpdated);
-  writer.writeLong(offsets[8], object.order);
-  writer.writeDouble(offsets[9], object.priority);
-  writer.writeString(offsets[10], object.text);
-  writer.writeString(offsets[11], object.viewType);
+  writer.writeString(offsets[2], object.column);
+  writer.writeDateTime(offsets[3], object.createdDate);
+  writer.writeDateTime(offsets[4], object.dueDate);
+  writer.writeLong(offsets[5], object.hashCode);
+  writer.writeDateTime(offsets[6], object.lastUpdated);
+  writer.writeLong(offsets[7], object.order);
+  writer.writeDouble(offsets[8], object.priority);
+  writer.writeString(offsets[9], object.text);
+  writer.writeString(offsets[10], object.viewType);
 }
 
 TBItem _tBItemDeserialize(
@@ -166,9 +159,9 @@ TBItem _tBItemDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TBItem(
-    reader.readString(offsets[10]),
-    reader.readString(offsets[3]),
-    reader.readLong(offsets[8]),
+    reader.readString(offsets[9]),
+    reader.readString(offsets[2]),
+    reader.readLong(offsets[7]),
   );
   object.boardColumns = reader.readObjectList<TBColumn>(
         offsets[0],
@@ -177,13 +170,12 @@ TBItem _tBItemDeserialize(
         TBColumn(),
       ) ??
       [];
-  object.boardName = reader.readString(offsets[2]);
-  object.createdDate = reader.readDateTime(offsets[4]);
-  object.dueDate = reader.readDateTimeOrNull(offsets[5]);
+  object.createdDate = reader.readDateTime(offsets[3]);
+  object.dueDate = reader.readDateTimeOrNull(offsets[4]);
   object.id = id;
-  object.lastUpdated = reader.readDateTime(offsets[7]);
-  object.priority = reader.readDoubleOrNull(offsets[9]);
-  object.viewType = reader.readString(offsets[11]);
+  object.lastUpdated = reader.readDateTime(offsets[6]);
+  object.priority = reader.readDoubleOrNull(offsets[8]);
+  object.viewType = reader.readString(offsets[10]);
   return object;
 }
 
@@ -207,22 +199,20 @@ P _tBItemDeserializeProp<P>(
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
-    case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readLong(offset)) as P;
     case 6:
-      return (reader.readLong(offset)) as P;
-    case 7:
       return (reader.readDateTime(offset)) as P;
-    case 8:
+    case 7:
       return (reader.readLong(offset)) as P;
-    case 9:
+    case 8:
       return (reader.readDoubleOrNull(offset)) as P;
-    case 10:
+    case 9:
       return (reader.readString(offset)) as P;
-    case 11:
+    case 10:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -631,136 +621,6 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
         upper,
         includeUpper,
       );
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'boardName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'boardName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'boardName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'boardName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> boardNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'boardName',
-        value: '',
-      ));
     });
   }
 
@@ -1646,18 +1506,6 @@ extension TBItemQueryLinks on QueryBuilder<TBItem, TBItem, QFilterCondition> {
 }
 
 extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByBoardName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'boardName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByBoardNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'boardName', Sort.desc);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByColumn() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'column', Sort.asc);
@@ -1768,18 +1616,6 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
 }
 
 extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByBoardName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'boardName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByBoardNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'boardName', Sort.desc);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByColumn() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'column', Sort.asc);
@@ -1908,13 +1744,6 @@ extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QDistinct> distinctByBoardName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'boardName', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QDistinct> distinctByColumn(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1991,12 +1820,6 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
       boardColumnsAsStringsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'boardColumnsAsStrings');
-    });
-  }
-
-  QueryBuilder<TBItem, String, QQueryOperations> boardNameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'boardName');
     });
   }
 

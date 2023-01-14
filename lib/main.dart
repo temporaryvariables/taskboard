@@ -13,7 +13,6 @@ Future<void> main() async {
   if (count == 0) {
     // -1 order signifies main item
     var i = TBItem("Main", "", -1);
-    i.boardName = "Main";
     await isarInstance.writeTxn(() async {
       await isarInstance.tBItems.put(i);
     });

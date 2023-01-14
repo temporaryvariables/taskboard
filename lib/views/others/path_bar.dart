@@ -25,23 +25,6 @@ class PathBar extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: fullPath.length,
             itemBuilder: (context, index) {
-              if (fullPath[index].parentItem.value == null) {
-                return GestureDetector(
-                  onTap: () async {
-                    if (fullPath[index] != value.currentItem) {
-                      await value.setBoard(fullPath[index]);
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(6, 5, 6, 5),
-                    child: Icon(
-                      Icons.home_filled,
-                      size: 20,
-                    ),
-                  ),
-                );
-              }
-
               return Padding(
                 padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
                 child: GestureDetector(
@@ -53,7 +36,7 @@ class PathBar extends StatelessWidget {
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 120),
                     child: Text(
-                      fullPath[index].boardName.toUpperCase(),
+                      fullPath[index].safeText.toUpperCase(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 16),
                     ),

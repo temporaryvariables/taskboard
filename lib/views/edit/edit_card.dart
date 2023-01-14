@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
+import 'package:taskboard/views/others/calendar.dart';
 import 'package:taskboard/views/others/dialog_box.dart';
 import 'package:taskboard/views/others/textfield.dart';
 
@@ -17,10 +18,11 @@ class EditTaskboardCard extends StatefulWidget {
 
 class _EditTaskboardCardState extends State<EditTaskboardCard> {
   TextEditingController itemTextController = TextEditingController();
-  TextEditingController itemBoardNameController = TextEditingController();
   TextEditingController itemDueDateController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
   double? selectedPriority;
+  List<bool> setPriority = [false, false, false, false, false];
+  late Future<List<TBItem>> possibleParents;
+  late TBItem selectedItem;
 
   TBItem get item => widget.item;
 
@@ -28,26 +30,23 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
   void initState() {
     super.initState();
     itemTextController.text = item.text;
-    itemBoardNameController.text = item.boardName ?? "";
     itemDueDateController.text = "NA";
     if (item.dueDate != null) {
       itemDueDateController.text = getFormatedDate(item.dueDate!);
     }
+    if (item.priority != null) {
+      for (int j = 0; j < item.priority!.toInt(); j++) {
+        setPriority[j] = true;
+      }
+    }
     selectedPriority = item.priority;
+    possibleParents = Provider.of<AppState>(context, listen: false)
+        .getPossibleParentItems2(item);
+    selectedItem = item.parentItem.value!;
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        itemDueDateController.text = getFormatedDate(picked);
-      });
-    }
+  int getPriority() {
+    return setPriority.where((element) => element).length;
   }
 
   @override
@@ -67,102 +66,105 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
             const SizedBox(
               height: 10,
             ),
-            const Text("Board Name", style: TextStyle(fontSize: 16)),
-            const SizedBox(
-              height: 2,
-            ),
-            TBTextfield(
-              textController: itemBoardNameController,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text("Due Date", style: TextStyle(fontSize: 16)),
-            const SizedBox(
-              height: 2,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TBTextfield(
-                    readOnly: true,
-                    textController: itemDueDateController,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 10, right: 5),
-                    child: Icon(Icons.calendar_today),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      itemDueDateController.text = "NA";
-                    });
-                  },
-                  child: const Icon(Icons.refresh, color: Colors.grey),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             const Text("Priority", style: TextStyle(fontSize: 16)),
             const SizedBox(
               height: 2,
             ),
             Row(
               children: [
+                for (int i = 0; i < setPriority.length; i++)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        setPriority = [false, false, false, false, false];
+                        for (int j = 0; j < i + 1; j++) {
+                          setPriority[j] = !setPriority[j];
+                        }
+                      });
+                    },
+                    child: Icon(
+                      Icons.flag,
+                      color: setPriority[i]
+                          ? Colors.red
+                          : Colors.grey.withOpacity(0.4),
+                    ),
+                  ),
                 const SizedBox(
                   width: 4,
                 ),
-                Text((selectedPriority ?? 0).toStringAsFixed(0),
+                Text((getPriority()).toStringAsFixed(0),
                     style: const TextStyle(fontSize: 16)),
                 const SizedBox(
                   width: 6,
                 ),
-                SizedBox(
-                  width: 200,
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      trackShape: const RectangularSliderTrackShape(),
-                      trackHeight: 4.0,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                      overlayColor: Colors.red.withAlpha(32),
-                      overlayShape:
-                          const RoundSliderOverlayShape(overlayRadius: 12.0),
-                    ),
-                    child: Slider(
-                      value: selectedPriority ?? 0,
-                      max: 5,
-                      min: 0,
-                      thumbColor: Colors.black,
-                      activeColor: Colors.black,
-                      inactiveColor: Colors.black,
-                      divisions: 5,
-                      onChanged: (double value) {
-                        setState(() {
-                          selectedPriority = value;
-                        });
-                      },
-                    ),
-                  ),
-                ),
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedPriority = null;
+                      setPriority = [false, false, false, false, false];
                     });
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.refresh,
-                    color: Colors.grey,
+                    color: getPriority() == 0 ? Colors.grey : Colors.black,
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            CalendarView(
+              item: item,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text("Parent Item", style: TextStyle(fontSize: 16)),
+            const SizedBox(
+              height: 2,
+            ),
+            Text("Current Item: ${item.parentItem.value!.itemDisplayString}"),
+            SizedBox(
+              height: 200,
+              child: FutureBuilder(
+                future: possibleParents,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedItem = snapshot.data![index];
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  if (selectedItem == snapshot.data![index])
+                                    const Icon(
+                                      Icons.check,
+                                      size: 14,
+                                    ),
+                                  if (selectedItem != snapshot.data![index])
+                                    const Icon(
+                                      Icons.check,
+                                      color: Colors.transparent,
+                                      size: 14,
+                                    ),
+                                  Text(snapshot.data![index].itemDisplayString)
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  } else {
+                    return const Text("Loading...");
+                  }
+                },
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -187,23 +189,22 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                 ),
                 MaterialButton(
                   child: const Text("Save", style: TextStyle(fontSize: 16)),
-                  onPressed: () {
+                  onPressed: () async {
                     item.text = itemTextController.text.isNotEmpty
                         ? itemTextController.text
                         : item.text;
-                    item.boardName = itemBoardNameController.text.isNotEmpty
-                        ? itemBoardNameController.text
-                        : item.boardName;
-                    if (!itemDueDateController.text.contains("NA")) {
-                      item.dueDate = selectedDate;
-                    } else {
-                      item.dueDate = null;
-                    }
-                    if (selectedPriority != null) {
-                      item.priority =
-                          double.parse(selectedPriority!.toStringAsFixed(1));
-                    } else {
+                    item.dueDate = Provider.of<AppState>(context, listen: false)
+                        .selectedDate;
+
+                    if (getPriority() == 0) {
                       item.priority = null;
+                    } else {
+                      item.priority = getPriority().toDouble();
+                    }
+
+                    if (selectedItem != item.parentItem.value!) {
+                      Provider.of<AppState>(context, listen: false)
+                          .moveItem(selectedItem, item);
                     }
                     Provider.of<AppState>(context, listen: false).addItem(item);
                     Navigator.pop(context);

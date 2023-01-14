@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/board/columns.dart';
 import 'package:taskboard/views/others/bottom_bar.dart';
 import 'package:taskboard/views/others/path_bar.dart';
@@ -26,9 +24,7 @@ class _TaskboardState extends State<Taskboard> {
           : null,
       body: Column(
         children: [
-          if (Provider.of<AppState>(context).currentItem.parentItem.value !=
-              null)
-            const PathBar(),
+          const PathBar(),
           const TaskboardColumns(),
           if (MediaQuery.of(context).size.width > minScreen)
             TaskboardBottomBar(

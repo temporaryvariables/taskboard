@@ -68,7 +68,6 @@ class TaskboardBottomBar extends StatelessWidget {
                               itemId, itemText);
                         }
                       } else if (text.startsWith("\\o")) {
-                        var nav = Navigator.of(context);
                         var itemIdString = text.replaceFirst("\\o", "").trim();
                         var itemId = int.tryParse(itemIdString);
                         if (itemId != null) {

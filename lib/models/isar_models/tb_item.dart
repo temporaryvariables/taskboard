@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
@@ -16,7 +17,6 @@ class TBItem {
   double? priority;
   String column;
   int order;
-  late String boardName;
   String viewType = "Board";
   late List<TBColumn> boardColumns;
   IsarLink<TBItem> parentItem = IsarLink<TBItem>();
@@ -26,7 +26,6 @@ class TBItem {
     var now = DateTime.now();
     createdDate = now;
     lastUpdated = now;
-    boardName = text;
 
     var backlog = TBColumn();
     backlog.name = "Backlog";
@@ -41,6 +40,15 @@ class TBItem {
     done.color = Colors.green;
 
     boardColumns = [backlog, inProgress, done];
+  }
+
+  @ignore
+  get safeText {
+    if (text.length < 16) {
+      return text.trim();
+    } else {
+      return "${text.trim().substring(0, 16)}...";
+    }
   }
 
   @ignore

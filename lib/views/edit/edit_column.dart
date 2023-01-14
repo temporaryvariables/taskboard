@@ -87,13 +87,23 @@ class _EditTaskboardColumnState extends State<EditTaskboardColumn> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 MaterialButton(
-                  child: const Text("Cancel", style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
                 MaterialButton(
-                  child: const Text("Save", style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
                   onPressed: () {
                     var item = widget.item;
                     var oldValue = item.boardColumns[widget.index].name;

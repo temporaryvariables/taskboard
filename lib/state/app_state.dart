@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
-import 'package:taskboard/main.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 
@@ -12,6 +11,7 @@ class AppState with ChangeNotifier {
   late List<TBItem> childItems;
 
   static final TBItem badItem = TBItem("Item not found :(", "", 0);
+  DateTime? selectedDate;
 
   AppState(Isar isarInsatnce, TBItem? mainItem) {
     isarInstance = isarInsatnce;
@@ -25,6 +25,11 @@ class AppState with ChangeNotifier {
     });
 
     reWatch();
+  }
+
+  void setSelectedDate(DateTime? date) {
+    selectedDate = date;
+    notifyListeners();
   }
 
   void reWatch() {
@@ -47,6 +52,21 @@ class AppState with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  Future<List<TBItem>> getPossibleParentItems2(TBItem excludeItem) async {
+    var mainItem = await getMainBoard();
+    return getPossibleParentItems(mainItem!, excludeItem);
+  }
+
+  List<TBItem> getPossibleParentItems(TBItem parentItem, TBItem excludeItem) {
+    if (excludeItem.id == parentItem.id) return [];
+    if (parentItem.boardItems.isEmpty) return [parentItem];
+    List<TBItem> items = [];
+    for (var item in parentItem.boardItems) {
+      items.addAll(getPossibleParentItems(item, excludeItem));
+    }
+    return [parentItem]..addAll(items);
   }
 
   void watchChild(int id) {
@@ -78,7 +98,13 @@ class AppState with ChangeNotifier {
     }
   }
 
+  Future<TBItem?> getMainBoard() async {
+    return await isarInstance.tBItems.filter().orderEqualTo(-1).findFirst();
+  }
+
   Future<void> setBoard(TBItem item) async {
+    if (item.id == currentItem.id) return;
+
     currentItem = (await isarInstance.tBItems
             .where()
             .filter()
@@ -109,7 +135,6 @@ class AppState with ChangeNotifier {
         .length;
     var i = TBItem(text, column, order);
     i.parentItem.value = currentItem;
-    i.boardName = text;
     var id = -1;
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(i);
@@ -129,6 +154,24 @@ class AppState with ChangeNotifier {
       id = await isarInstance.tBItems.put(i);
     });
     watchChild(id);
+    notifyListeners();
+    return id;
+  }
+
+  Future<int> moveItem(TBItem dest, TBItem item) async {
+    var id = -1;
+    var parentItem = item.parentItem.value!;
+    await isarInstance.writeTxn(() async {
+      item.parentItem.value = dest;
+      item.parentItem.save();
+      id = await isarInstance.tBItems.put(item);
+      parentItem.boardItems.remove(item);
+      parentItem.boardItems.save();
+      dest.boardItems.add(item);
+      dest.boardItems.save();
+    });
+    watchChild(id);
+    notifyListeners();
     return id;
   }
 

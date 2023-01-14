@@ -33,8 +33,8 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                         color: iconEnabled,
                       )
                     : const Icon(
-                        mainIcon,
-                        color: iconEnabled,
+                        leftArrowIcon,
+                        color: iconDisabled,
                       ),
               ),
               const SizedBox(
@@ -46,7 +46,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                     Navigator.push(context, openEditCard(currentItem));
                   },
                   child: Text(
-                    currentItem.boardName,
+                    currentItem.text,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 20,
@@ -60,6 +60,35 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
               ),
               Row(
                 children: [
+                  if (appState.currentItem.order != -1)
+                    GestureDetector(
+                      onTap: () async {
+                        await appState.setMainBoard();
+                      },
+                      child: const Text(
+                        "Main",
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
+                    ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      var nav = Navigator.of(context);
+                      var itemId = await appState.addItemWithText("New Item");
+                      var item = await appState.getItemFromId(itemId);
+                      nav.push(openEditCard(item!));
+                    },
+                    child: const Icon(
+                      Icons.add,
+                      color: iconEnabled,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
                   GestureDetector(
                     onTap: () {
                       if (appState.currentItem.viewType == "Board") {
@@ -73,21 +102,6 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                       color: (appState.currentItem.viewType == "Board")
                           ? iconDisabled
                           : iconEnabled,
-                      size: 28,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      await appState.setMainBoard();
-                    },
-                    child: Icon(
-                      mainIcon,
-                      color: (currentItem.parentItem.value != null)
-                          ? iconEnabled
-                          : iconDisabled,
                       size: 28,
                     ),
                   ),
