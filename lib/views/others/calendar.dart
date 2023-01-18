@@ -75,7 +75,7 @@ class _CalendarViewState extends State<CalendarView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        value.setSelectedDate(null);
+                        value.selectedDate = null;
                       },
                       child: Icon(
                         Icons.refresh,
@@ -150,8 +150,8 @@ class _CalendarViewState extends State<CalendarView> {
         for (var i = 0; i < daysInMonth; i++)
           GestureDetector(
             onTap: () {
-              value.setSelectedDate(
-                  DateTime(showingDate.year, showingDate.month, i + 1));
+              value.selectedDate ==
+                  DateTime(showingDate.year, showingDate.month, i + 1);
             },
             child: Container(
               color: getDayColor(i, value.selectedDate),

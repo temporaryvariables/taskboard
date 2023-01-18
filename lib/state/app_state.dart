@@ -1,22 +1,32 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 
 class AppState with ChangeNotifier {
   late Isar isarInstance;
   TextEditingController cliController = TextEditingController();
+  late SharedPreferences sharedPreferences;
 
   late TBItem currentItem;
-  late List<TBItem> childItems;
 
-  static final TBItem badItem = TBItem("Item not found :(", "", 0);
-  DateTime? selectedDate;
+  DateTime? _selectedDate;
 
-  AppState(Isar isarInsatnce, TBItem? mainItem) {
-    isarInstance = isarInsatnce;
-    currentItem = mainItem ?? badItem;
-    childItems = currentItem.boardItems.toList();
+  set selectedDate(DateTime? date) {
+    _selectedDate = date;
+    notifyListeners();
+  }
+
+  DateTime? get selectedDate => _selectedDate;
+
+  AppState(SharedPreferences prefs, Isar inst, TBItem? item) {
+    sharedPreferences = prefs;
+    isarInstance = inst;
+    currentItem = item ?? defaultItem;
 
     cliController.addListener(() {
       if (!cliController.text.startsWith('\\')) {
@@ -27,9 +37,81 @@ class AppState with ChangeNotifier {
     reWatch();
   }
 
-  void setSelectedDate(DateTime? date) {
-    selectedDate = date;
+  Future<bool> openIsarInstance(Isar inst) async {
+    isarInstance = inst;
+    var count = await isarInstance.getSize();
+    if (count == 0) await _createMainBoard();
+    var mainItem =
+        await isarInstance.tBItems.filter().orderEqualTo(-1).findFirst();
+    currentItem = mainItem ?? defaultItem;
+    cliController.addListener(() {
+      if (!cliController.text.startsWith('\\')) notifyListeners();
+    });
+    reWatch();
     notifyListeners();
+    return true;
+  }
+
+  Future<int> _createMainBoard() async {
+    // -1 order signifies main item
+    var i = TBItem("Main", "", -1);
+    await isarInstance.writeTxn(() async {
+      return await isarInstance.tBItems.put(i);
+    });
+    return -1;
+  }
+
+  Future<bool> cleanupTrackedDbs() async {
+    var paths = await getDbsFromSettings();
+    for (var path in paths) {
+      if (!await checkIfFileExists(path)) {
+        var instances = sharedPreferences.getStringList("isarInstances") ?? [];
+        instances.remove(path);
+        sharedPreferences.setStringList("isarInstances", instances);
+      }
+    }
+    return true;
+  }
+
+  Future<bool> removeDbFromSettings(String path) async {
+    var instances = sharedPreferences.getStringList("isarInstances") ?? [];
+    instances.remove(path);
+    var isCompleted =
+        sharedPreferences.setStringList("isarInstances", instances);
+    if (getDefaultDb() == path) {
+      sharedPreferences.remove("defaultInstance");
+    }
+    notifyListeners();
+    return isCompleted;
+  }
+
+  Future<bool> setDefaultDbs(String path) async {
+    var isCompleted =
+        await sharedPreferences.setString("defaultInstance", path);
+    notifyListeners();
+    return isCompleted;
+  }
+
+  String? getDefaultDb() {
+    return sharedPreferences.getString("defaultInstance");
+  }
+
+  Future<bool> checkIfFileExists(String path) async {
+    var file = File(path);
+    return file.existsSync();
+  }
+
+  Future<bool> addNewDbsToSettings(Isar instanceToAdd) async {
+    var instances = sharedPreferences.getStringList("isarInstances") ?? [];
+    if (!instances.contains(instanceToAdd.path!)) {
+      instances.add(instanceToAdd.path!);
+      sharedPreferences.setStringList("isarInstances", instances);
+    }
+    return true;
+  }
+
+  Future<List<String>> getDbsFromSettings() async {
+    return sharedPreferences.getStringList("isarInstances") ?? [];
   }
 
   void reWatch() {
@@ -47,8 +129,7 @@ class AppState with ChangeNotifier {
                 .filter()
                 .idEqualTo(currentItem.id)
                 .findFirst()) ??
-            badItem;
-        childItems = currentItem.boardItems.toList();
+            defaultItem;
         notifyListeners();
       },
     );
@@ -77,8 +158,7 @@ class AppState with ChangeNotifier {
                 .filter()
                 .idEqualTo(currentItem.id)
                 .findFirst()) ??
-            badItem;
-        childItems = currentItem.boardItems.toList();
+            defaultItem;
         notifyListeners();
       },
     );
@@ -110,8 +190,7 @@ class AppState with ChangeNotifier {
             .filter()
             .idEqualTo(item.id)
             .findFirst()) ??
-        badItem;
-    childItems = currentItem.boardItems.toList();
+        defaultItem;
 
     reWatch();
     notifyListeners();
@@ -164,6 +243,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       item.parentItem.value = dest;
       item.parentItem.save();
+      item.column = dest.boardColumns.first.name;
       id = await isarInstance.tBItems.put(item);
       parentItem.boardItems.remove(item);
       parentItem.boardItems.save();

@@ -110,7 +110,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      // TODO: Need to implement
+                      Navigator.push(context, openSettings());
                     },
                     child: const Icon(
                       Icons.settings,

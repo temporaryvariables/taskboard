@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
@@ -58,7 +59,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Text Content", style: TextStyle(fontSize: 16)),
+            const Text("Text", style: TextStyle(fontSize: 16)),
             const SizedBox(
               height: 2,
             ),
@@ -113,6 +114,15 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
             const SizedBox(
               height: 10,
             ),
+            const Text(
+              "Due Date",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
             CalendarView(
               item: item,
             ),
@@ -123,17 +133,27 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
             const SizedBox(
               height: 2,
             ),
-            Text("Current Item: ${item.parentItem.value!.itemDisplayString}"),
-            SizedBox(
-              height: 200,
+            Text(
+              "Current Parent Item: ${item.parentItem.value!.itemDisplayString}",
+              style: const TextStyle(fontSize: 10),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            Container(
+              constraints: const BoxConstraints(maxHeight: 200),
               child: FutureBuilder(
                 future: possibleParents,
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 0,
+                          color: backgroundTodayWhite,
+                          child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: GestureDetector(
                               onTap: () {
@@ -154,12 +174,17 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                                       color: Colors.transparent,
                                       size: 14,
                                     ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
                                   Text(snapshot.data![index].itemDisplayString)
                                 ],
                               ),
                             ),
-                          );
-                        });
+                          ),
+                        );
+                      },
+                    );
                   } else {
                     return const Text("Loading...");
                   }
