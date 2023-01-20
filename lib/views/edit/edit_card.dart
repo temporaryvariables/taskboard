@@ -85,9 +85,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                     },
                     child: Icon(
                       Icons.flag,
-                      color: setPriority[i]
-                          ? Colors.red
-                          : Colors.grey.withOpacity(0.4),
+                      color: setPriority[i] ? accent : lightGray,
                     ),
                   ),
                 const SizedBox(
@@ -106,7 +104,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                   },
                   child: Icon(
                     Icons.refresh,
-                    color: getPriority() == 0 ? Colors.grey : Colors.black,
+                    color: getPriority() == 0 ? disabledGray : enabledBlack,
                   ),
                 ),
               ],
@@ -152,7 +150,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                       itemBuilder: (context, index) {
                         return Card(
                           elevation: 0,
-                          color: backgroundTodayWhite,
+                          color: accent,
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: GestureDetector(
@@ -171,7 +169,7 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
                                   if (selectedItem != snapshot.data![index])
                                     const Icon(
                                       Icons.check,
-                                      color: Colors.transparent,
+                                      color: transparent,
                                       size: 14,
                                     ),
                                   const SizedBox(
@@ -198,8 +196,13 @@ class _EditTaskboardCardState extends State<EditTaskboardCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 MaterialButton(
-                  child: const Text("Delete",
-                      style: TextStyle(color: Colors.red, fontSize: 16)),
+                  child: const Text(
+                    "Delete",
+                    style: TextStyle(
+                      color: accent,
+                      fontSize: 16,
+                    ),
+                  ),
                   onPressed: () {
                     Provider.of<AppState>(context, listen: false)
                         .deleteItemRecursivily(item);

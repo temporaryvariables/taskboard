@@ -18,7 +18,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
         return AppBar(
           elevation: 0,
           leadingWidth: 0,
-          backgroundColor: backgroundWhite,
+          backgroundColor: primary,
           title: Row(
             children: [
               GestureDetector(
@@ -29,12 +29,12 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                     : null,
                 child: (currentItem.parentItem.value != null)
                     ? const Icon(
-                        leftArrowIcon,
-                        color: iconEnabled,
+                        Icons.arrow_back,
+                        color: black,
                       )
                     : const Icon(
-                        leftArrowIcon,
-                        color: iconDisabled,
+                        Icons.arrow_back,
+                        color: disabledGray,
                       ),
               ),
               const SizedBox(
@@ -43,14 +43,14 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context, openEditCard(currentItem));
+                    Navigator.push(context, openEditItemDialogbox(currentItem));
                   },
                   child: Text(
                     currentItem.text,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 20,
-                      color: Colors.black,
+                      color: black,
                     ),
                   ),
                 ),
@@ -67,7 +67,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                       },
                       child: const Text(
                         "Main",
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                        style: TextStyle(color: black, fontSize: 14),
                       ),
                     ),
                   const SizedBox(
@@ -78,11 +78,11 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                       var nav = Navigator.of(context);
                       var itemId = await appState.addItemWithText("New Item");
                       var item = await appState.getItemFromId(itemId);
-                      nav.push(openEditCard(item!));
+                      nav.push(openEditItemDialogbox(item!));
                     },
                     child: const Icon(
                       Icons.add,
-                      color: iconEnabled,
+                      color: black,
                       size: 28,
                     ),
                   ),
@@ -98,10 +98,10 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                       }
                     },
                     child: Icon(
-                      listIcon,
+                      Icons.list_alt,
                       color: (appState.currentItem.viewType == "Board")
-                          ? iconDisabled
-                          : iconEnabled,
+                          ? lightGray
+                          : black,
                       size: 28,
                     ),
                   ),
@@ -110,11 +110,11 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Navigator.push(context, openSettings());
+                      Navigator.push(context, openSettingsDialogbox());
                     },
                     child: const Icon(
                       Icons.settings,
-                      color: iconEnabled,
+                      color: black,
                       size: 28,
                     ),
                   ),

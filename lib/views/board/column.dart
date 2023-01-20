@@ -23,7 +23,7 @@ class TaskboardColumn extends StatelessWidget {
       width: cardWidth * 1.05,
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.black12,
+          color: lightGray,
         ),
       ),
       child: Padding(

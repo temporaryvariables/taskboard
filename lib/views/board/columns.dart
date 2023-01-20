@@ -86,7 +86,7 @@ class TaskboardColumns extends StatelessWidget {
                               .setBoard(item);
                         },
                         onDoubleTap: () {
-                          Navigator.push(context, openEditCard(item));
+                          Navigator.push(context, openEditItemDialogbox(item));
                         },
                         child: Card(
                           child: ClipPath(
@@ -198,7 +198,7 @@ class TaskboardColumns extends StatelessWidget {
                             .setBoard(item);
                       },
                       onDoubleTap: () {
-                        Navigator.push(context, openEditCard(item));
+                        Navigator.push(context, openEditItemDialogbox(item));
                       },
                       child: Card(
                         child: ClipPath(

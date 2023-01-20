@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 
 part 'tb_item.g.dart';
@@ -29,15 +30,15 @@ class TBItem {
 
     var backlog = TBColumn();
     backlog.name = "Backlog";
-    backlog.color = Colors.grey;
+    backlog.color = columnColors[0];
 
     var inProgress = TBColumn();
     inProgress.name = "In Progress";
-    inProgress.color = Colors.blue;
+    inProgress.color = columnColors[1];
 
     var done = TBColumn();
     done.name = "Done";
-    done.color = Colors.green;
+    done.color = columnColors[2];
 
     boardColumns = [backlog, inProgress, done];
   }

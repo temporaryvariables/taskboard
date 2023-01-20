@@ -24,7 +24,7 @@ class DatabaseCard extends StatelessWidget {
     File pathFile = File(path);
     return Card(
       elevation: 0,
-      color: backgroundTodayWhite,
+      color: accent,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Row(
@@ -58,7 +58,7 @@ class DatabaseCard extends StatelessWidget {
                 onPressed: onDefault,
                 icon: Icon(
                   Icons.star,
-                  color: (isDefault) ? Colors.yellow : Colors.grey,
+                  color: (isDefault) ? accent : disabledGray,
                 ),
               ),
             if (onOpen != null)

@@ -55,24 +55,26 @@ class _EditTaskboardColumnState extends State<EditTaskboardColumn> {
               spacing: 5,
               runSpacing: 5,
               children: [
-                for (int i = 0; i < colors.length; i++)
+                for (int i = 0; i < columnColors.length; i++)
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedColor = colors[i];
+                        selectedColor = columnColors[i];
                       });
                     },
-                    child: (selectedColor != colors[i])
-                        ? CircleAvatar(backgroundColor: colors[i], radius: 16)
+                    child: (selectedColor != columnColors[i])
+                        ? CircleAvatar(
+                            backgroundColor: columnColors[i], radius: 16)
                         : Stack(
                             alignment: AlignmentDirectional.center,
                             children: [
                               CircleAvatar(
-                                backgroundColor: colors[i].withOpacity(0.4),
+                                backgroundColor:
+                                    columnColors[i].withOpacity(0.4),
                                 radius: 16,
                               ),
                               CircleAvatar(
-                                backgroundColor: colors[i],
+                                backgroundColor: columnColors[i],
                                 radius: 12,
                               ),
                             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/state/app_state.dart';
 
 class PathBar extends StatelessWidget {
@@ -14,7 +15,7 @@ class PathBar extends StatelessWidget {
         var fullPath = value.getFullPath();
         return Container(
           height: 30,
-          color: const Color.fromARGB(255, 173, 216, 230).withOpacity(0.4),
+          color: accent2,
           child: ListView.separated(
             separatorBuilder: (context, index) {
               return const Icon(
@@ -38,7 +39,10 @@ class PathBar extends StatelessWidget {
                     child: Text(
                       fullPath[index].safeText.toUpperCase(),
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

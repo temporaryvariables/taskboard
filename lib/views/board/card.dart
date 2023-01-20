@@ -23,7 +23,7 @@ class TaskboardCard extends StatelessWidget {
           await Provider.of<AppState>(context, listen: false).setBoard(item);
         },
         onDoubleTap: () {
-          Navigator.push(context, openEditCard(item));
+          Navigator.push(context, openEditItemDialogbox(item));
         },
         child: Card(
           elevation: 0,
@@ -50,7 +50,9 @@ class TaskboardCard extends StatelessWidget {
                       child: Text(
                         "[${item.id}] ${item.text}",
                         overflow: TextOverflow.clip,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                     if (item.dueDate != null || item.priority != null)
@@ -65,11 +67,15 @@ class TaskboardCard extends StatelessWidget {
                           children: [
                             const Text(
                               "Due Date",
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                             Text(
                               getFormatedDate(item.dueDate!),
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                           ],
                         ),

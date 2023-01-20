@@ -44,8 +44,8 @@ class TaskBoardColumnHeader extends StatelessWidget {
                   await state.addColumn(index + 1, isarColumn);
                   break;
                 case Menu.edit:
-                  Navigator.push(
-                      context, openEditColumn(index, state.currentItem));
+                  Navigator.push(context,
+                      openEditColumnDialogbox(index, state.currentItem));
                   break;
                 case Menu.remove:
                   await state.removeColumn(index);

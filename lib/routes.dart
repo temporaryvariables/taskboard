@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/views/edit/edit_card.dart';
 import 'package:taskboard/views/edit/edit_column.dart';
 import 'package:taskboard/views/settings/settings.dart';
 
-Route<Widget> openEditCard(TBItem item) {
+Route<Widget> openEditItemDialogbox(TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: Colors.black.withOpacity(0.4),
+    barrierColor: black.withOpacity(0.4),
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
         EditTaskboardCard(item: item),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
-      const Offset begin = Offset(0.0, 1.0);
+      const Offset begin = Offset(0.0, -1.0);
       const Offset end = Offset.zero;
       const Cubic curve = Curves.ease;
 
@@ -29,10 +30,10 @@ Route<Widget> openEditCard(TBItem item) {
   );
 }
 
-Route<Widget> openEditColumn(int index, TBItem item) {
+Route<Widget> openEditColumnDialogbox(int index, TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: Colors.black.withOpacity(0.4),
+    barrierColor: black.withOpacity(0.4),
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
@@ -42,7 +43,7 @@ Route<Widget> openEditColumn(int index, TBItem item) {
     ),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
-      const Offset begin = Offset(0.0, 1.0);
+      const Offset begin = Offset(0.0, -1.0);
       const Offset end = Offset.zero;
       const Cubic curve = Curves.ease;
 
@@ -57,17 +58,17 @@ Route<Widget> openEditColumn(int index, TBItem item) {
   );
 }
 
-Route<Widget> openSettings() {
+Route<Widget> openSettingsDialogbox() {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: Colors.black.withOpacity(0.4),
+    barrierColor: black.withOpacity(0.4),
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
         const SettingsPage(),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
-      const Offset begin = Offset(0.0, 1.0);
+      const Offset begin = Offset(0.0, -1.0);
       const Offset end = Offset.zero;
       const Cubic curve = Curves.ease;
 

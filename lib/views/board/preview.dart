@@ -25,7 +25,7 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
     return Container(
       constraints: const BoxConstraints(
           maxHeight: cardWidth * 0.55, maxWidth: cardWidth * 0.95),
-      color: Colors.white10,
+      color: primary,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -42,8 +42,11 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
           return SizedBox(
             width: cardWidth * 0.20,
             child: Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black12)),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: lightGray,
+                ),
+              ),
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -59,7 +62,7 @@ class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
                         child: Center(
                           child: Text(
                             "+${columnItems.length - 3}",
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: primary),
                           ),
                         ),
                       ),

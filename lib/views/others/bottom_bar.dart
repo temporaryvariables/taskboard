@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
 
@@ -15,7 +16,7 @@ class TaskboardBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: primary,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Row(
@@ -86,7 +87,7 @@ class TaskboardBottomBar extends StatelessWidget {
                       _contextFocus.requestFocus();
                     },
                     style: const TextStyle(fontSize: 22),
-                    cursorColor: Colors.black,
+                    cursorColor: black,
                     cursorWidth: 10,
                     decoration: const InputDecoration(
                       isDense: true,
@@ -95,13 +96,13 @@ class TaskboardBottomBar extends StatelessWidget {
                         vertical: 10,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: BorderSide(color: primary),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: BorderSide(color: primary),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: BorderSide(color: primary),
                       ),
                     ),
                   );

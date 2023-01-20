@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
+import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/state/app_state.dart';
 import 'package:taskboard/views/settings/database_card.dart';
@@ -145,7 +146,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: const Text(
                   "Create Database",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: black,
                   ),
                 ),
               ),
@@ -180,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: const Text(
                 "Import Database",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: black,
                 ),
               ),
             ),

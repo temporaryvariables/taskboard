@@ -14,31 +14,6 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
-  List<String> months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
-
-  List<String> days = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-  ];
-
   var showingDate = DateTime.now();
   var todaysDate = DateTime.now();
 
@@ -79,9 +54,8 @@ class _CalendarViewState extends State<CalendarView> {
                       },
                       child: Icon(
                         Icons.refresh,
-                        color: value.selectedDate == null
-                            ? Colors.grey
-                            : Colors.black,
+                        color:
+                            value.selectedDate == null ? disabledGray : enabledBlack,
                       ),
                     ),
                   ],
@@ -143,14 +117,19 @@ class _CalendarViewState extends State<CalendarView> {
           Center(
             child: Text(
               days[i],
-              style: const TextStyle(fontSize: 12),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
-        for (var i = 0; i < firstDayOfMonth; i++) const Center(child: Text("")),
+        for (var i = 0; i < firstDayOfMonth; i++)
+          const Center(
+            child: Text(""),
+          ),
         for (var i = 0; i < daysInMonth; i++)
           GestureDetector(
             onTap: () {
-              value.selectedDate ==
+              value.selectedDate =
                   DateTime(showingDate.year, showingDate.month, i + 1);
             },
             child: Container(
@@ -166,16 +145,16 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  Color? getDayColor(int i, selectedDate) {
+  Color? getDayColor(int i, DateTime? selectedDate) {
     if (selectedDate != null &&
-        (selectedDate!.month == showingDate.month &&
-            selectedDate!.year == showingDate.year &&
-            selectedDate!.day == i + 1)) {
-      return backgroundLightWhite;
+        (selectedDate.month == showingDate.month &&
+            selectedDate.year == showingDate.year &&
+            selectedDate.day == i + 1)) {
+      return accent2;
     } else if (showingDate.month == todaysDate.month &&
         showingDate.year == todaysDate.year &&
         i == todaysDate.day) {
-      return backgroundTodayWhite;
+      return accent;
     } else {
       return null;
     }
