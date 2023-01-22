@@ -8,7 +8,7 @@ import 'package:taskboard/features/settings/settings_page.dart';
 Route<Widget> openEditItemDialogbox(TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: black.withOpacity(0.4),
+    barrierColor: lightGray,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
@@ -33,7 +33,7 @@ Route<Widget> openEditItemDialogbox(TBItem item) {
 Route<Widget> openEditColumnDialogbox(int index, TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: black.withOpacity(0.4),
+    barrierColor: lightGray,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
@@ -61,7 +61,7 @@ Route<Widget> openEditColumnDialogbox(int index, TBItem item) {
 Route<Widget> openSettingsDialogbox() {
   return PageRouteBuilder<Widget>(
     opaque: false,
-    barrierColor: black.withOpacity(0.4),
+    barrierColor: lightGray,
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>

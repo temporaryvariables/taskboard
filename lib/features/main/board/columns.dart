@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/features/main/board/column.dart';
+import 'package:taskboard/features/main/board/item_card.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/app_state.dart';
-import 'package:taskboard/features/main/item_card.dart';
 
 class TaskboardColumns extends StatelessWidget {
   const TaskboardColumns({
@@ -49,7 +49,7 @@ class TaskboardColumns extends StatelessWidget {
                     children: [
                       for (TBItem item
                           in appState.currentItem.boardItems.toList())
-                        TBItemCard(columnColor: columnColor, item: item)
+                        TaskboardItemCard(columnColor: columnColor, item: item)
                     ],
                   ),
                 ),

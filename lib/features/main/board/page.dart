@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/features/main/columns.dart';
+import 'package:taskboard/features/main/board/columns.dart';
 import 'package:taskboard/features/main/bottom_bar.dart';
 import 'package:taskboard/features/main/path_bar.dart';
 import 'package:taskboard/features/main/top_bar.dart';
@@ -18,14 +18,14 @@ class _TaskboardPageState extends State<TaskboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 241, 238, 238),
+      backgroundColor: primary,
       appBar: MediaQuery.of(context).size.width > minScreen
           ? const TaskboardTopBar()
           : null,
       body: Column(
         children: [
           const PathBar(),
-          const TBColumns(),
+          const TaskboardColumns(),
           if (MediaQuery.of(context).size.width > minScreen)
             TaskboardBottomBar(
               contextFocus: _contextFocus,
