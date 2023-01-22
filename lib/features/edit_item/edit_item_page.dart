@@ -3,21 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/others/calendar.dart';
-import 'package:taskboard/views/others/dialog_box.dart';
-import 'package:taskboard/views/others/textfield.dart';
+import 'package:taskboard/app_state.dart';
+import 'package:taskboard/features/edit_item/calendar.dart';
+import 'package:taskboard/features/shared/dialog_box.dart';
+import 'package:taskboard/features/shared/textfield.dart';
 
-class EditTaskboardCard extends StatefulWidget {
-  const EditTaskboardCard({super.key, required this.item});
+class EditItemPage extends StatefulWidget {
+  const EditItemPage({super.key, required this.item});
 
   final TBItem item;
 
   @override
-  State<EditTaskboardCard> createState() => _EditTaskboardCardState();
+  State<EditItemPage> createState() => _EditItemPageState();
 }
 
-class _EditTaskboardCardState extends State<EditTaskboardCard> {
+class _EditItemPageState extends State<EditItemPage> {
   TextEditingController itemTextController = TextEditingController();
   TextEditingController itemDueDateController = TextEditingController();
   double? selectedPriority;

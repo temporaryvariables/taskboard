@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/board/card.dart';
-import 'package:taskboard/views/others/column_menu.dart';
+import 'package:taskboard/app_state.dart';
+import 'package:taskboard/features/main/item_card.dart';
+import 'package:taskboard/features/main/board/column_menu.dart';
 
 class TaskboardColumn extends StatelessWidget {
   const TaskboardColumn({
@@ -54,7 +54,7 @@ class TaskboardColumn extends StatelessWidget {
                       var item = itemsInColumn[index];
                       var columnColor = column.color;
                       var itemCard =
-                          TaskboardCard(columnColor: columnColor, item: item);
+                          TBItemCard(columnColor: columnColor, item: item);
                       return Draggable<TBItem>(
                         data: item,
                         feedback: itemCard,

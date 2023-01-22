@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/others/dialog_box.dart';
-import 'package:taskboard/views/others/textfield.dart';
+import 'package:taskboard/app_state.dart';
+import 'package:taskboard/features/shared/dialog_box.dart';
+import 'package:taskboard/features/shared/textfield.dart';
 
-class EditTaskboardColumn extends StatefulWidget {
-  const EditTaskboardColumn(
-      {super.key, required this.index, required this.item});
+class EditColumnPage extends StatefulWidget {
+  const EditColumnPage({super.key, required this.index, required this.item});
 
   final TBItem item;
   final int index;
 
   @override
-  State<EditTaskboardColumn> createState() => _EditTaskboardColumnState();
+  State<EditColumnPage> createState() => _EditColumnPageState();
 }
 
-class _EditTaskboardColumnState extends State<EditTaskboardColumn> {
+class _EditColumnPageState extends State<EditColumnPage> {
   late Color selectedColor;
   TextEditingController columnName = TextEditingController();
 

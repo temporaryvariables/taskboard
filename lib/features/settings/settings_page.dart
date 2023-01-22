@@ -6,10 +6,10 @@ import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/settings/database_card.dart';
-import 'package:taskboard/views/others/dialog_box.dart';
-import 'package:taskboard/views/others/textfield.dart';
+import 'package:taskboard/app_state.dart';
+import 'package:taskboard/features/settings/database_card.dart';
+import 'package:taskboard/features/shared/dialog_box.dart';
+import 'package:taskboard/features/shared/textfield.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

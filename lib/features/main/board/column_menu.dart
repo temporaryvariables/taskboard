@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/routes.dart';
-import 'package:taskboard/state/app_state.dart';
+import 'package:taskboard/app_state.dart';
 
 class TaskBoardColumnHeader extends StatelessWidget {
   const TaskBoardColumnHeader({

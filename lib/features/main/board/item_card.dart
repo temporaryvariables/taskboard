@@ -4,11 +4,11 @@ import 'package:taskboard/constants.dart';
 import 'package:taskboard/helper.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/routes.dart';
-import 'package:taskboard/state/app_state.dart';
-import 'package:taskboard/views/board/preview.dart';
+import 'package:taskboard/app_state.dart';
+import 'package:taskboard/features/main/preview.dart';
 
-class TaskboardCard extends StatelessWidget {
-  const TaskboardCard({Key? key, required this.columnColor, required this.item})
+class TaskboardItemCard extends StatelessWidget {
+  const TaskboardItemCard({Key? key, required this.columnColor, required this.item})
       : super(key: key);
 
   final Color columnColor;
@@ -102,7 +102,7 @@ class TaskboardCard extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 5),
                         child: Align(
                           alignment: Alignment.center,
-                          child: TaskboardCardPreview(
+                          child: TBPreview(
                             item: item,
                           ),
                         ),

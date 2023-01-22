@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/views/edit/edit_card.dart';
-import 'package:taskboard/views/edit/edit_column.dart';
-import 'package:taskboard/views/settings/settings.dart';
+import 'package:taskboard/features/edit_item/edit_item_page.dart';
+import 'package:taskboard/features/edit_column/edit_column_page.dart';
+import 'package:taskboard/features/settings/settings_page.dart';
 
 Route<Widget> openEditItemDialogbox(TBItem item) {
   return PageRouteBuilder<Widget>(
@@ -12,7 +12,7 @@ Route<Widget> openEditItemDialogbox(TBItem item) {
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        EditTaskboardCard(item: item),
+        EditItemPage(item: item),
     transitionsBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       const Offset begin = Offset(0.0, -1.0);
@@ -37,7 +37,7 @@ Route<Widget> openEditColumnDialogbox(int index, TBItem item) {
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        EditTaskboardColumn(
+        EditColumnPage(
       item: item,
       index: index,
     ),

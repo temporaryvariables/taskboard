@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/views/board/columns.dart';
-import 'package:taskboard/views/others/bottom_bar.dart';
-import 'package:taskboard/views/others/path_bar.dart';
-import 'package:taskboard/views/others/top_bar.dart';
+import 'package:taskboard/features/main/columns.dart';
+import 'package:taskboard/features/main/bottom_bar.dart';
+import 'package:taskboard/features/main/path_bar.dart';
+import 'package:taskboard/features/main/top_bar.dart';
 
-class Taskboard extends StatefulWidget {
-  const Taskboard({super.key});
+class TaskboardPage extends StatefulWidget {
+  const TaskboardPage({super.key});
 
   @override
-  State<Taskboard> createState() => _TaskboardState();
+  State<TaskboardPage> createState() => _TaskboardPageState();
 }
 
-class _TaskboardState extends State<Taskboard> {
+class _TaskboardPageState extends State<TaskboardPage> {
   final FocusNode _contextFocus = FocusNode();
 
   @override
@@ -25,7 +25,7 @@ class _TaskboardState extends State<Taskboard> {
       body: Column(
         children: [
           const PathBar(),
-          const TaskboardColumns(),
+          const TBColumns(),
           if (MediaQuery.of(context).size.width > minScreen)
             TaskboardBottomBar(
               contextFocus: _contextFocus,

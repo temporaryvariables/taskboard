@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/routes.dart';
-import 'package:taskboard/state/app_state.dart';
+import 'package:taskboard/app_state.dart';
 
 class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
   const TaskboardTopBar({Key? key}) : super(key: key);

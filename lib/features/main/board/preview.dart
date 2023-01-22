@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 
-class TaskboardCardPreview extends StatefulWidget {
-  const TaskboardCardPreview({super.key, required this.item});
+class TaskboardPreview extends StatefulWidget {
+  const TaskboardPreview({super.key, required this.item});
 
   final TBItem item;
 
   @override
-  State<TaskboardCardPreview> createState() => _TaskboardCardPreviewState();
+  State<TaskboardPreview> createState() => _TaskboardPreviewState();
 }
 
-class _TaskboardCardPreviewState extends State<TaskboardCardPreview> {
+class _TaskboardPreviewState extends State<TaskboardPreview> {
   late TBItem item;
 
   @override

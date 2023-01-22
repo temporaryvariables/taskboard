@@ -53,7 +53,6 @@ class AppState with ChangeNotifier {
   }
 
   Future<int> _createMainBoard() async {
-    // -1 order signifies main item
     var i = TBItem("Main", "", -1);
     await isarInstance.writeTxn(() async {
       return await isarInstance.tBItems.put(i);
@@ -222,7 +221,7 @@ class AppState with ChangeNotifier {
       await i.parentItem.save();
     });
     watchChild(id);
-    // notifyListeners();
+
     return id;
   }
 
@@ -274,7 +273,7 @@ class AppState with ChangeNotifier {
         id = await isarInstance.tBItems.put(item);
       });
     }
-    // notifyListeners();
+
     return id;
   }
 
@@ -292,7 +291,7 @@ class AppState with ChangeNotifier {
       }
     });
     watchChild(id);
-    // notifyListeners();
+
     return id;
   }
 
@@ -313,7 +312,6 @@ class AppState with ChangeNotifier {
         await isarInstance.tBItems.delete(item.id);
       });
     }
-    // notifyListeners();
   }
 
   Future<int> addColumn(int index, TBColumn column) async {
@@ -329,7 +327,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(currentItem);
     });
-    // notifyListeners();
+
     return id;
   }
 
@@ -343,7 +341,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(currentItem);
     });
-    // notifyListeners();
+
     return id;
   }
 
@@ -377,7 +375,5 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       await isarInstance.tBItems.putAll(updatingItems);
     });
-
-    // notifyListeners();
   }
 }

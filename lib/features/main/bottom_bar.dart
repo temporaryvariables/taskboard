@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/state/app_state.dart';
+import 'package:taskboard/app_state.dart';
 
 class TaskboardBottomBar extends StatelessWidget {
   const TaskboardBottomBar({
