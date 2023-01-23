@@ -15,4 +15,8 @@ class TBColumn {
   set color(Color color) {
     colorAsInt = color.value;
   }
+
+  TBColumn();
+
+  TBColumn.withNameAndColorDefined(this.name, this.colorAsInt);
 }

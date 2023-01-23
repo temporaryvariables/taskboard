@@ -49,7 +49,7 @@ class TaskboardItemCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
-                        "[${item.id}] ${item.text}",
+                        "[${item.id}] ${item.title}",
                         overflow: TextOverflow.clip,
                         style: const TextStyle(
                           fontSize: 18,

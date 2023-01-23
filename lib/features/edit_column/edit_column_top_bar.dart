@@ -4,8 +4,8 @@ import 'package:taskboard/constants.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/app_state.dart';
 
-class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
-  const TaskboardTopBar({Key? key}) : super(key: key);
+class EditColumnTopBar extends StatelessWidget with PreferredSizeWidget {
+  const EditColumnTopBar({Key? key}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

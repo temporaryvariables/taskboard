@@ -1,5 +1,3 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_column.dart';
@@ -13,55 +11,38 @@ class TBItem {
   Id id = Isar.autoIncrement;
   late DateTime createdDate;
   late DateTime lastUpdated;
-  String text;
+
+  String title;
+  String? description;
   DateTime? dueDate;
+  DateTime? endDate;
   double? priority;
-  String column;
+  String status;
+  List<String> labels = [];
+
   int order;
   String viewType = "Board";
-  late List<TBColumn> boardColumns;
+  List<TBColumn> boardColumns = defaultBoardColumns;
   IsarLink<TBItem> parentItem = IsarLink<TBItem>();
   IsarLinks<TBItem> boardItems = IsarLinks<TBItem>();
 
-  TBItem(this.text, this.column, this.order) {
+  TBItem(this.title, this.status, this.order) {
     var now = DateTime.now();
     createdDate = now;
     lastUpdated = now;
-
-    var backlog = TBColumn();
-    backlog.name = "Backlog";
-    backlog.color = columnColors[0];
-
-    var inProgress = TBColumn();
-    inProgress.name = "In Progress";
-    inProgress.color = columnColors[1];
-
-    var done = TBColumn();
-    done.name = "Done";
-    done.color = columnColors[2];
-
-    boardColumns = [backlog, inProgress, done];
   }
 
   @ignore
-  get safeText {
-    if (text.length < 16) {
-      return text.trim();
-    } else {
-      return "${text.trim().substring(0, 16)}...";
-    }
-  }
-
-  @ignore
-  String get itemDisplayString => "[$id] $text";
+  String get itemIdentifier => "[$id] $title";
 
   List<String> get boardColumnsAsStrings {
-    return boardColumns.map((e) => e.name).toList();
+    return boardColumns.map((tbColumns) => tbColumns.name).toList();
   }
 
   @override
   bool operator ==(dynamic other) => other != null && other.id == id;
 
   @override
+  // ignore: unnecessary_overrides
   int get hashCode => super.hashCode;
 }

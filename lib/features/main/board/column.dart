@@ -31,7 +31,7 @@ class TaskboardColumn extends StatelessWidget {
         child: DragTarget<TBItem>(
           onWillAccept: (data) {
             if (data == null) return false;
-            return data.column != column.name;
+            return data.status != column.name;
           },
           onAccept: (data) async {
             await Provider.of<AppState>(context, listen: false)

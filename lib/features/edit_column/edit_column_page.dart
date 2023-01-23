@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
+import 'package:taskboard/features/edit_column/edit_column_top_bar.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/app_state.dart';
-import 'package:taskboard/features/shared/dialog_box.dart';
 import 'package:taskboard/features/shared/textfield.dart';
 
 class EditColumnPage extends StatefulWidget {
@@ -29,9 +29,9 @@ class _EditColumnPageState extends State<EditColumnPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DialogBox(
-      title: "Editing Column",
-      child: Padding(
+    return Scaffold(
+      appBar: const EditColumnTopBar(),
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -37,7 +37,7 @@ class PathBar extends StatelessWidget {
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 120),
                     child: Text(
-                      fullPath[index].safeText.toUpperCase(),
+                      fullPath[index].title,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 16,

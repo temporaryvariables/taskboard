@@ -28,48 +28,63 @@ const TBItemSchema = CollectionSchema(
       name: r'boardColumnsAsStrings',
       type: IsarType.stringList,
     ),
-    r'column': PropertySchema(
-      id: 2,
-      name: r'column',
-      type: IsarType.string,
-    ),
     r'createdDate': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'createdDate',
       type: IsarType.dateTime,
+    ),
+    r'description': PropertySchema(
+      id: 3,
+      name: r'description',
+      type: IsarType.string,
     ),
     r'dueDate': PropertySchema(
       id: 4,
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
-    r'hashCode': PropertySchema(
+    r'endDate': PropertySchema(
       id: 5,
+      name: r'endDate',
+      type: IsarType.dateTime,
+    ),
+    r'hashCode': PropertySchema(
+      id: 6,
       name: r'hashCode',
       type: IsarType.long,
     ),
+    r'labels': PropertySchema(
+      id: 7,
+      name: r'labels',
+      type: IsarType.stringList,
+    ),
     r'lastUpdated': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'lastUpdated',
       type: IsarType.dateTime,
     ),
     r'order': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'order',
       type: IsarType.long,
     ),
     r'priority': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'priority',
       type: IsarType.double,
     ),
-    r'text': PropertySchema(
-      id: 9,
-      name: r'text',
+    r'status': PropertySchema(
+      id: 11,
+      name: r'status',
+      type: IsarType.string,
+    ),
+    r'title': PropertySchema(
+      id: 12,
+      name: r'title',
       type: IsarType.string,
     ),
     r'viewType': PropertySchema(
-      id: 10,
+      id: 13,
       name: r'viewType',
       type: IsarType.string,
     )
@@ -122,8 +137,21 @@ int _tBItemEstimateSize(
       bytesCount += value.length * 3;
     }
   }
-  bytesCount += 3 + object.column.length * 3;
-  bytesCount += 3 + object.text.length * 3;
+  {
+    final value = object.description;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.labels.length * 3;
+  {
+    for (var i = 0; i < object.labels.length; i++) {
+      final value = object.labels[i];
+      bytesCount += value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.status.length * 3;
+  bytesCount += 3 + object.title.length * 3;
   bytesCount += 3 + object.viewType.length * 3;
   return bytesCount;
 }
@@ -141,15 +169,18 @@ void _tBItemSerialize(
     object.boardColumns,
   );
   writer.writeStringList(offsets[1], object.boardColumnsAsStrings);
-  writer.writeString(offsets[2], object.column);
-  writer.writeDateTime(offsets[3], object.createdDate);
+  writer.writeDateTime(offsets[2], object.createdDate);
+  writer.writeString(offsets[3], object.description);
   writer.writeDateTime(offsets[4], object.dueDate);
-  writer.writeLong(offsets[5], object.hashCode);
-  writer.writeDateTime(offsets[6], object.lastUpdated);
-  writer.writeLong(offsets[7], object.order);
-  writer.writeDouble(offsets[8], object.priority);
-  writer.writeString(offsets[9], object.text);
-  writer.writeString(offsets[10], object.viewType);
+  writer.writeDateTime(offsets[5], object.endDate);
+  writer.writeLong(offsets[6], object.hashCode);
+  writer.writeStringList(offsets[7], object.labels);
+  writer.writeDateTime(offsets[8], object.lastUpdated);
+  writer.writeLong(offsets[9], object.order);
+  writer.writeDouble(offsets[10], object.priority);
+  writer.writeString(offsets[11], object.status);
+  writer.writeString(offsets[12], object.title);
+  writer.writeString(offsets[13], object.viewType);
 }
 
 TBItem _tBItemDeserialize(
@@ -159,9 +190,9 @@ TBItem _tBItemDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TBItem(
-    reader.readString(offsets[9]),
-    reader.readString(offsets[2]),
-    reader.readLong(offsets[7]),
+    reader.readString(offsets[12]),
+    reader.readString(offsets[11]),
+    reader.readLong(offsets[9]),
   );
   object.boardColumns = reader.readObjectList<TBColumn>(
         offsets[0],
@@ -170,12 +201,15 @@ TBItem _tBItemDeserialize(
         TBColumn(),
       ) ??
       [];
-  object.createdDate = reader.readDateTime(offsets[3]);
+  object.createdDate = reader.readDateTime(offsets[2]);
+  object.description = reader.readStringOrNull(offsets[3]);
   object.dueDate = reader.readDateTimeOrNull(offsets[4]);
+  object.endDate = reader.readDateTimeOrNull(offsets[5]);
   object.id = id;
-  object.lastUpdated = reader.readDateTime(offsets[6]);
-  object.priority = reader.readDoubleOrNull(offsets[8]);
-  object.viewType = reader.readString(offsets[10]);
+  object.labels = reader.readStringList(offsets[7]) ?? [];
+  object.lastUpdated = reader.readDateTime(offsets[8]);
+  object.priority = reader.readDoubleOrNull(offsets[10]);
+  object.viewType = reader.readString(offsets[13]);
   return object;
 }
 
@@ -197,22 +231,28 @@ P _tBItemDeserializeProp<P>(
     case 1:
       return (reader.readStringList(offset) ?? []) as P;
     case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
       return (reader.readDateTime(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
-      return (reader.readDateTime(offset)) as P;
-    case 7:
       return (reader.readLong(offset)) as P;
+    case 7:
+      return (reader.readStringList(offset) ?? []) as P;
     case 8:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 10:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
+      return (reader.readString(offset)) as P;
+    case 13:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -624,136 +664,6 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'column',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'column',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'column',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'column',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> columnIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'column',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterFilterCondition> createdDateEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -803,6 +713,152 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'description',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'description',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'description',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'description',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'description',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> descriptionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'description',
+        value: '',
       ));
     });
   }
@@ -868,6 +924,75 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'dueDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> endDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'endDate',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -978,6 +1103,221 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
         upper: upper,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'labels',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'labels',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'labels',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'labels',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition>
+      labelsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'labels',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> labelsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'labels',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -1164,20 +1504,20 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textEqualTo(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textGreaterThan(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1185,14 +1525,14 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textLessThan(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1200,14 +1540,14 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textBetween(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1216,7 +1556,7 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'text',
+        property: r'status',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1226,68 +1566,199 @@ extension TBItemQueryFilter on QueryBuilder<TBItem, TBItem, QFilterCondition> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textStartsWith(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textEndsWith(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textContains(String value,
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'text',
+        property: r'status',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textMatches(
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'text',
+        property: r'status',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textIsEmpty() {
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'text',
+        property: r'status',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> textIsNotEmpty() {
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> statusIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'text',
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'title',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'title',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'title',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterFilterCondition> titleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'title',
         value: '',
       ));
     });
@@ -1506,18 +1977,6 @@ extension TBItemQueryLinks on QueryBuilder<TBItem, TBItem, QFilterCondition> {
 }
 
 extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByColumn() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'column', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByColumnDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'column', Sort.desc);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByCreatedDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdDate', Sort.asc);
@@ -1530,6 +1989,18 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
     });
   }
 
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByDescription() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'description', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByDescriptionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'description', Sort.desc);
+    });
+  }
+
   QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByDueDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dueDate', Sort.asc);
@@ -1539,6 +2010,18 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
   QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByDueDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dueDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
     });
   }
 
@@ -1590,15 +2073,27 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByText() {
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'text', Sort.asc);
+      return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByTextDesc() {
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'text', Sort.desc);
+      return query.addSortBy(r'status', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> sortByTitleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 
@@ -1616,18 +2111,6 @@ extension TBItemQuerySortBy on QueryBuilder<TBItem, TBItem, QSortBy> {
 }
 
 extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByColumn() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'column', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByColumnDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'column', Sort.desc);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByCreatedDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdDate', Sort.asc);
@@ -1640,6 +2123,18 @@ extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
     });
   }
 
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByDescription() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'description', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByDescriptionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'description', Sort.desc);
+    });
+  }
+
   QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByDueDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dueDate', Sort.asc);
@@ -1649,6 +2144,18 @@ extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
   QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByDueDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dueDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
     });
   }
 
@@ -1712,15 +2219,27 @@ extension TBItemQuerySortThenBy on QueryBuilder<TBItem, TBItem, QSortThenBy> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByText() {
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'text', Sort.asc);
+      return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByTextDesc() {
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'text', Sort.desc);
+      return query.addSortBy(r'status', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QAfterSortBy> thenByTitleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 
@@ -1744,16 +2263,16 @@ extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QDistinct> distinctByColumn(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'column', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<TBItem, TBItem, QDistinct> distinctByCreatedDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdDate');
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByDescription(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
     });
   }
 
@@ -1763,9 +2282,21 @@ extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
     });
   }
 
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'endDate');
+    });
+  }
+
   QueryBuilder<TBItem, TBItem, QDistinct> distinctByHashCode() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'hashCode');
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByLabels() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'labels');
     });
   }
 
@@ -1787,10 +2318,17 @@ extension TBItemQueryWhereDistinct on QueryBuilder<TBItem, TBItem, QDistinct> {
     });
   }
 
-  QueryBuilder<TBItem, TBItem, QDistinct> distinctByText(
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'text', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TBItem, TBItem, QDistinct> distinctByTitle(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
     });
   }
 
@@ -1823,15 +2361,15 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
     });
   }
 
-  QueryBuilder<TBItem, String, QQueryOperations> columnProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'column');
-    });
-  }
-
   QueryBuilder<TBItem, DateTime, QQueryOperations> createdDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdDate');
+    });
+  }
+
+  QueryBuilder<TBItem, String?, QQueryOperations> descriptionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'description');
     });
   }
 
@@ -1841,9 +2379,21 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
     });
   }
 
+  QueryBuilder<TBItem, DateTime?, QQueryOperations> endDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'endDate');
+    });
+  }
+
   QueryBuilder<TBItem, int, QQueryOperations> hashCodeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'hashCode');
+    });
+  }
+
+  QueryBuilder<TBItem, List<String>, QQueryOperations> labelsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'labels');
     });
   }
 
@@ -1865,9 +2415,15 @@ extension TBItemQueryProperty on QueryBuilder<TBItem, TBItem, QQueryProperty> {
     });
   }
 
-  QueryBuilder<TBItem, String, QQueryOperations> textProperty() {
+  QueryBuilder<TBItem, String, QQueryOperations> statusProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'text');
+      return query.addPropertyName(r'status');
+    });
+  }
+
+  QueryBuilder<TBItem, String, QQueryOperations> titleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'title');
     });
   }
 

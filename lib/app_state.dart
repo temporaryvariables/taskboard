@@ -14,15 +14,6 @@ class AppState with ChangeNotifier {
 
   late TBItem currentItem;
 
-  DateTime? _selectedDate;
-
-  set selectedDate(DateTime? date) {
-    _selectedDate = date;
-    notifyListeners();
-  }
-
-  DateTime? get selectedDate => _selectedDate;
-
   AppState(SharedPreferences prefs, Isar inst, TBItem? item) {
     sharedPreferences = prefs;
     isarInstance = inst;
@@ -209,7 +200,7 @@ class AppState with ChangeNotifier {
     var column = currentItem.boardColumns.first.name;
     var order = currentItem.boardItems
         .toList()
-        .where((element) => element.column == column)
+        .where((element) => element.status == column)
         .length;
     var i = TBItem(text, column, order);
     i.parentItem.value = currentItem;
@@ -242,7 +233,7 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       item.parentItem.value = dest;
       item.parentItem.save();
-      item.column = dest.boardColumns.first.name;
+      item.status = dest.boardColumns.first.name;
       id = await isarInstance.tBItems.put(item);
       parentItem.boardItems.remove(item);
       parentItem.boardItems.save();
@@ -268,7 +259,7 @@ class AppState with ChangeNotifier {
     var item = await getItemFromId(itemId);
     var id = -1;
     if (item != null) {
-      item.text = text;
+      item.title = text;
       await isarInstance.writeTxn(() async {
         id = await isarInstance.tBItems.put(item);
       });
@@ -284,8 +275,8 @@ class AppState with ChangeNotifier {
     await isarInstance.writeTxn(() async {
       id = await isarInstance.tBItems.put(i);
       for (var element in item.boardItems) {
-        if (element.column == oldValue) {
-          element.column = newValue;
+        if (element.status == oldValue) {
+          element.status = newValue;
         }
         await isarInstance.tBItems.put(element);
       }
@@ -353,19 +344,19 @@ class AppState with ChangeNotifier {
   }
 
   Future<void> moveItemToColumn(TBItem i, String toColumn) async {
-    var fromColumn = i.column;
+    var fromColumn = i.status;
     i.order = currentItem.boardItems
         .toList()
-        .where((element) => element.column == toColumn)
+        .where((element) => element.status == toColumn)
         .length;
-    i.column = toColumn;
+    i.status = toColumn;
     await isarInstance.writeTxn(() async {
       await isarInstance.tBItems.put(i);
     });
 
     var updatingItems = currentItem.boardItems
         .toList()
-        .where((element) => element.column == fromColumn && element.id != i.id)
+        .where((element) => element.status == fromColumn && element.id != i.id)
         .toList();
 
     for (int i = 0; i < updatingItems.length; i++) {

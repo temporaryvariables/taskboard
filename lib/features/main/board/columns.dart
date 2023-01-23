@@ -61,7 +61,7 @@ class TaskboardColumns extends StatelessWidget {
               List<DropdownMenuItem<TBColumn>> dropDownColumns = [];
               for (var column in columns) {
                 sortedItems.addAll(
-                    items.where((element) => column.name == element.column));
+                    items.where((element) => column.name == element.status));
                 dropDownColumns.add(
                     DropdownMenuItem(value: column, child: Text(column.name)));
               }
@@ -77,7 +77,7 @@ class TaskboardColumns extends StatelessWidget {
                       var item = sortedItems[index];
                       var itemColumn = columns
                           .where(
-                            (element) => element.name == item.column,
+                            (element) => element.name == item.status,
                           )
                           .first;
                       return GestureDetector(
@@ -112,7 +112,7 @@ class TaskboardColumns extends StatelessWidget {
                                     Row(
                                       children: [
                                         Checkbox(
-                                          value: item.column == columns[1].name,
+                                          value: item.status == columns[1].name,
                                           activeColor: columns[1].color,
                                           onChanged: (value) {
                                             if (value != null) {
@@ -132,7 +132,7 @@ class TaskboardColumns extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                item.itemDisplayString,
+                                                item.itemIdentifier,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   fontSize: 18,
@@ -143,7 +143,7 @@ class TaskboardColumns extends StatelessWidget {
                                                   children: [
                                                     if (item.dueDate != null)
                                                       Text(
-                                                        "Due Date: ${getFormatedDate(item.dueDate)}",
+                                                        "Due Date: ${getFormatedDateAndTime(item.dueDate)}",
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: const TextStyle(
@@ -189,7 +189,7 @@ class TaskboardColumns extends StatelessWidget {
                     var item = sortedItems[index];
                     var itemColumn = columns
                         .where(
-                          (element) => element.name == item.column,
+                          (element) => element.name == item.status,
                         )
                         .first;
                     return GestureDetector(
@@ -228,7 +228,7 @@ class TaskboardColumns extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              item.itemDisplayString,
+                                              item.itemIdentifier,
                                               overflow: TextOverflow.ellipsis,
                                               style:
                                                   const TextStyle(fontSize: 18),
@@ -237,7 +237,7 @@ class TaskboardColumns extends StatelessWidget {
                                               children: [
                                                 if (item.dueDate != null)
                                                   Text(
-                                                    "Due Date: ${getFormatedDate(item.dueDate)}",
+                                                    "Due Date: ${getFormatedDateAndTime(item.dueDate)}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: const TextStyle(
@@ -298,11 +298,11 @@ class TaskboardColumns extends StatelessWidget {
                     !appState.cliController.text.startsWith("\\")) {
                   itemsInColumn = itemsInColumn
                       .where((element) =>
-                          element.text.contains(appState.cliController.text))
+                          element.title.contains(appState.cliController.text))
                       .toList();
                 }
                 itemsInColumn = itemsInColumn
-                    .where((element) => element.column == column.name)
+                    .where((element) => element.status == column.name)
                     .toList();
                 sortTBItems(itemsInColumn);
                 // itemsInColumn.sort(

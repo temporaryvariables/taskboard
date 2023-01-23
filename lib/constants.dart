@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:taskboard/models/isar_models/tb_column.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 
 // Other Constants
 const List<String> defaultColumns = ["Backlog", "In Progress", "Done"];
 TBItem defaultItem = TBItem("404: Item not found", "default", -1);
+List<TBColumn> defaultBoardColumns = [
+  TBColumn.withNameAndColorDefined("Backlog", columnColors[0].value),
+  TBColumn.withNameAndColorDefined("In Progress", columnColors[1].value),
+  TBColumn.withNameAndColorDefined("Done", columnColors[2].value),
+];
 
 enum Menu { addLeft, addRight, remove, edit }
+
+enum DateType { single, range }
 
 const double cardWidth = 250;
 const double minScreen = 450;
 
 // Color Constants
 const Color black = Colors.black;
+const Color red = Colors.red;
 const Color primary = Colors.white;
 const Color secondary = Colors.black;
 const Color accent = Color.fromARGB(160, 236, 114, 87);

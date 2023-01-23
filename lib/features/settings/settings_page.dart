@@ -8,7 +8,6 @@ import 'package:taskboard/constants.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/app_state.dart';
 import 'package:taskboard/features/settings/database_card.dart';
-import 'package:taskboard/features/shared/dialog_box.dart';
 import 'package:taskboard/features/shared/textfield.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -57,9 +56,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DialogBox(
-      title: "Settings",
-      child: Padding(
+    return Scaffold(
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

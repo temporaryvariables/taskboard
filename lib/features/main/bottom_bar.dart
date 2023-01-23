@@ -16,7 +16,15 @@ class TaskboardBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primary,
+      decoration: const BoxDecoration(
+        color: primary,
+        border: Border(
+          top: BorderSide(
+            color: lightGray,
+            width: 1,
+          ),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Row(
