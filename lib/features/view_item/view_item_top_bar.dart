@@ -28,9 +28,6 @@ class ViewItemTopBar extends StatelessWidget with PreferredSizeWidget {
                   color: black,
                 ),
               ),
-              Row(
-                children: [],
-              )
             ],
           ),
         );

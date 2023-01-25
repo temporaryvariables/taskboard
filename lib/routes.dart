@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
-import 'package:taskboard/features/view_item/edit_item/calendar.dart';
+import 'package:taskboard/features/view_item/edit_item/edit_date.dart';
+import 'package:taskboard/features/view_item/edit_item/edit_parent.dart';
+import 'package:taskboard/features/view_item/view_item_v2.dart';
 import 'package:taskboard/models/isar_models/tb_item.dart';
-import 'package:taskboard/features/view_item/view_item_page.dart';
 import 'package:taskboard/features/edit_column/edit_column_page.dart';
 import 'package:taskboard/features/settings/settings_page.dart';
 
@@ -13,7 +14,7 @@ Route<Widget> openEditItemDialogbox(TBItem item) {
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        ViewItemPage(item: item),
+        ViewItemV2(item: item),
     transitionsBuilder: _transactionBuilder,
   );
 }
@@ -52,7 +53,21 @@ Route<Widget> editDueDate(TBItem item) {
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) =>
-        CalendarView(
+        DateSelector(
+      item: item,
+    ),
+    transitionsBuilder: _transactionBuilder,
+  );
+}
+
+Route<Widget> editParentItem(TBItem item) {
+  return PageRouteBuilder<Widget>(
+    opaque: false,
+    barrierColor: lightGray,
+    transitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) =>
+        ParentSelector(
       item: item,
     ),
     transitionsBuilder: _transactionBuilder,

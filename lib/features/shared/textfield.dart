@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:taskboard/constants.dart';
 
 class TBTextfield extends StatelessWidget {
-  const TBTextfield({Key? key, this.textController, this.readOnly = false})
-      : super(key: key);
+  const TBTextfield({
+    Key? key,
+    this.textController,
+    this.readOnly = false,
+    this.fontSize = 18,
+  }) : super(key: key);
 
   final bool readOnly;
+  final double fontSize;
   final TextEditingController? textController;
 
   @override
@@ -13,7 +18,7 @@ class TBTextfield extends StatelessWidget {
     return TextField(
       readOnly: readOnly,
       controller: textController,
-      style: const TextStyle(fontSize: 18),
+      style: TextStyle(fontSize: fontSize),
       cursorColor: black,
       decoration: const InputDecoration(
         isDense: true,

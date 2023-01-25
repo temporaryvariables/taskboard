@@ -11,7 +11,8 @@ String getFormatedDateAndTime(DateTime dateTime) {
   return date;
 }
 
-String getFormatedDate(DateTime dateTime) {
+String getFormatedDate(DateTime? dateTime) {
+  if (dateTime == null) return "No Date";
   String month = _getMonth(dateTime.month);
   String day = _getDay(dateTime.day);
   String year = dateTime.year.toString();

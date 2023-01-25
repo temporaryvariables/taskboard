@@ -18,6 +18,15 @@ enum DateType { single, range }
 const double cardWidth = 250;
 const double minScreen = 450;
 
+const double tinyFont = 12;
+const double smallFont = 14;
+const double mediumFont = 16;
+const double normalFont = 18;
+const double largeFont = 24;
+const double xLargeFont = 32;
+const double xxLargeFont = 48;
+const double xxxLargeFont = 64;
+
 // Color Constants
 const Color black = Colors.black;
 const Color red = Colors.red;

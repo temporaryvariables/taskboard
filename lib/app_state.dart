@@ -227,6 +227,19 @@ class AppState with ChangeNotifier {
     return id;
   }
 
+  Future<int> editTitle(
+      TBItem item, TextEditingController titleController) async {
+    var title = titleController.text.trim();
+    if (title.isEmpty) return -1;
+    item.title = title;
+    return await addItem(item);
+  }
+
+  Future<int> editPriority(TBItem item, double priority) async {
+    item.priority = priority;
+    return await addItem(item);
+  }
+
   Future<int> moveItem(TBItem dest, TBItem item) async {
     var id = -1;
     var parentItem = item.parentItem.value!;
