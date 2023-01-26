@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskboard/constants.dart';
 import 'package:taskboard/app_state.dart';
 
 class PathBar extends StatelessWidget {
@@ -15,33 +14,35 @@ class PathBar extends StatelessWidget {
         var fullPath = value.getFullPath();
         return Container(
           height: 30,
-          color: accent2,
+          padding: const EdgeInsets.only(left: 14),
+          color: Theme.of(context).primaryColor,
           child: ListView.separated(
             separatorBuilder: (context, index) {
-              return const Icon(
+              return Icon(
                 Icons.arrow_forward_ios,
-                size: 16,
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                size: 14,
               );
             },
             scrollDirection: Axis.horizontal,
             itemCount: fullPath.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: GestureDetector(
                   onTap: () async {
                     if (fullPath[index] != value.currentItem) {
                       await value.setBoard(fullPath[index]);
                     }
                   },
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 120),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       fullPath[index].title,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Theme.of(context).appBarTheme.backgroundColor,
                       ),
                     ),
                   ),
