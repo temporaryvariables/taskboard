@@ -26,14 +26,14 @@ class TaskboardBottomBar extends StatelessWidget {
             onSubmitted: (String text) async {
               _cliParser(text, appState, context);
             },
-            style: const TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 16, height: 1.5),
             cursorColor: black,
             cursorWidth: 10,
             decoration: const InputDecoration(
               isDense: true,
               prefixIcon: Icon(
                 Icons.arrow_forward_ios,
-                size: 20,
+                size: 16,
               ),
               contentPadding: EdgeInsets.all(0),
               enabledBorder: OutlineInputBorder(

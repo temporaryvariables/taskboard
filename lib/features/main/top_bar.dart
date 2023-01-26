@@ -24,6 +24,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
               AppBarIconButton(
                 isDisabled: currentItem.parentItem.value == null,
                 onPressed: () async {
+                  if (currentItem.parentItem.value == null) return;
                   await appState.setBoard(currentItem.parentItem.value!);
                 },
                 icon: Icons.arrow_back,
