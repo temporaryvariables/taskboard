@@ -44,8 +44,7 @@ class EditColumnTopBar extends StatelessWidget with PreferredSizeWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (currentItem.parentItem.value != null) {
-                      Navigator.push(
-                          context, openEditItemDialogbox(currentItem));
+                      Navigator.push(context, viewItem(currentItem));
                     }
                   },
                   child: Text(
@@ -81,7 +80,7 @@ class EditColumnTopBar extends StatelessWidget with PreferredSizeWidget {
                       var nav = Navigator.of(context);
                       var itemId = await appState.addItemWithText("New Item");
                       var item = await appState.getItemFromId(itemId);
-                      nav.push(openEditItemDialogbox(item!));
+                      nav.push(viewItem(item!));
                     },
                     child: const Icon(
                       Icons.add,

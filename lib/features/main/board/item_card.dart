@@ -24,7 +24,7 @@ class TaskboardItemCard extends StatelessWidget {
           await Provider.of<AppState>(context, listen: false).setBoard(item);
         },
         onDoubleTap: () {
-          Navigator.push(context, openEditItemDialogbox(item));
+          Navigator.push(context, viewItem(item));
         },
         child: Card(
           elevation: 0,

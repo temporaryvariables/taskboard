@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskboard/constants.dart';
+import 'package:taskboard/features/main/app_bar_icon_button.dart';
 import 'package:taskboard/routes.dart';
 import 'package:taskboard/app_state.dart';
 
@@ -12,30 +13,21 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(
-      builder: (_, appState, __) {
-        var currentItem = appState.currentItem;
-        return AppBar(
-          elevation: 0,
-          leadingWidth: 0,
-          backgroundColor: primary,
-          title: Row(
+    return AppBar(
+      elevation: 0,
+      leadingWidth: 0,
+      title: Consumer<AppState>(
+        builder: (_, appState, __) {
+          var currentItem = appState.currentItem;
+          return Row(
             children: [
-              GestureDetector(
-                onTap: (currentItem.parentItem.value != null)
-                    ? () async {
-                        await appState.setBoard(currentItem.parentItem.value!);
-                      }
-                    : null,
-                child: (currentItem.parentItem.value != null)
-                    ? const Icon(
-                        Icons.arrow_back,
-                        color: black,
-                      )
-                    : const Icon(
-                        Icons.arrow_back,
-                        color: disabledGray,
-                      ),
+              AppBarIconButton(
+                isDisabled: currentItem.parentItem.value == null,
+                onPressed: () async {
+                  await appState.setBoard(currentItem.parentItem.value!);
+                },
+                icon: Icons.arrow_back,
+                size: null,
               ),
               const SizedBox(
                 width: 12,
@@ -44,8 +36,7 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (currentItem.parentItem.value != null) {
-                      Navigator.push(
-                          context, openEditItemDialogbox(currentItem));
+                      Navigator.push(context, viewItem(currentItem));
                     }
                   },
                   child: Text(
@@ -63,70 +54,44 @@ class TaskboardTopBar extends StatelessWidget with PreferredSizeWidget {
               ),
               Row(
                 children: [
-                  if (appState.currentItem.order != -1)
-                    GestureDetector(
-                      onTap: () async {
-                        await appState.setMainBoard();
-                      },
-                      child: const Text(
-                        "Main",
-                        style: TextStyle(color: black, fontSize: 14),
-                      ),
-                    ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
+                  AppBarIconButton(
+                    onPressed: () async {
                       var nav = Navigator.of(context);
                       var itemId = await appState.addItemWithText("New Item");
                       var item = await appState.getItemFromId(itemId);
-                      nav.push(openEditItemDialogbox(item!));
+                      nav.push(viewItem(item!));
                     },
-                    child: const Icon(
-                      Icons.add,
-                      color: black,
-                      size: 28,
-                    ),
+                    icon: Icons.add,
                   ),
                   const SizedBox(
                     width: 12,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (appState.currentItem.viewType == "Board") {
+                  AppBarIconButton(
+                    isDisabled: currentItem.viewType == "Board",
+                    onPressed: () async {
+                      if (currentItem.viewType == "Board") {
                         appState.toggleViewType(true);
                       } else {
                         appState.toggleViewType(false);
                       }
                     },
-                    child: Icon(
-                      Icons.list_alt,
-                      color: (appState.currentItem.viewType == "Board")
-                          ? lightGray
-                          : black,
-                      size: 28,
-                    ),
+                    icon: Icons.list_alt,
                   ),
                   const SizedBox(
                     width: 12,
                   ),
-                  GestureDetector(
-                    onTap: () async {
+                  AppBarIconButton(
+                    onPressed: () async {
                       Navigator.push(context, openSettingsDialogbox());
                     },
-                    child: const Icon(
-                      Icons.settings,
-                      color: black,
-                      size: 28,
-                    ),
+                    icon: Icons.settings,
                   ),
                 ],
               )
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

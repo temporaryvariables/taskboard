@@ -7,7 +7,7 @@ import 'package:taskboard/models/isar_models/tb_item.dart';
 import 'package:taskboard/features/edit_column/edit_column_page.dart';
 import 'package:taskboard/features/settings/settings_page.dart';
 
-Route<Widget> openEditItemDialogbox(TBItem item) {
+Route<Widget> viewItem(TBItem item) {
   return PageRouteBuilder<Widget>(
     opaque: false,
     barrierColor: lightGray,
